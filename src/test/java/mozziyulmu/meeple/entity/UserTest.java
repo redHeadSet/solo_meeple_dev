@@ -135,4 +135,81 @@ class UserTest {
         Assertions.assertThat(boardgame1.getCategorys().size()).isEqualTo(3);
         Assertions.assertThat(boardgame2.getCategorys().size()).isEqualTo(2);
     }
+
+    @Test
+    public void 이미지_테스트() {
+        // given
+        User user = new User("email", "password", "nickname");
+        user.setProfileImage(new Images("D:\\aaa.jpg", user));
+        em.persist(user);
+        Long userId = user.getId();
+
+        Boardgame bg = new Boardgame();
+        bg.setKor_name("테포마");
+        bg.addGameImage(new Images("C:\\terraforming_mars1.jpg", bg));
+        bg.addGameImage(new Images("C:\\add\\terraforming_mars2.jpg", bg));
+        bg.addGameImage(new Images("C:\\remove\\terraforming_mars3.jpg", bg));
+        em.persist(bg);
+        Long bgid = bg.getId();
+
+        em.flush(); em.clear();
+
+        // when
+        User user1 = em.find(User.class, userId);
+        Boardgame boardgame = em.find(Boardgame.class, bgid);
+
+        // then
+        String path = user1.getUser_profile_image().getPath();
+        Assertions.assertThat(path).isEqualTo("D:\\aaa.jpg");
+        System.out.println(user1.getNick_name() + "님의 이미지는 " + path + "에 있다");
+
+        List<Images> images = boardgame.getImages();
+        Assertions.assertThat(images.size()).isEqualTo(3);
+        System.out.println("이미지 총 " + images.size() + "장");
+        for(Images each: images){
+            System.out.println(each.getPath());
+        }
+    }
+
+    @Test
+    public void 보드게임_퍼블리셔_test() {
+        // given
+        Publisher publisher = new Publisher("코리아 보드게임즈", "korea boardgames");
+        em.persist(publisher);
+        Long pub_id = publisher.getId();
+
+        Boardgame bg1 = new Boardgame();
+        bg1.setKor_name("테포마");
+        bg1.setPublisher(publisher);
+        em.persist(bg1);
+        Boardgame bg2 = new Boardgame();
+        bg2.setKor_name("아딱");
+        bg2.setPublisher(publisher);
+        em.persist(bg2);
+        Boardgame bg3 = new Boardgame();
+        bg3.setKor_name("돌팔이약장수");
+        bg3.setPublisher(publisher);
+        em.persist(bg3);
+
+        em.flush();em.clear();
+
+        // when
+        Publisher find_pub = em.find(Publisher.class, pub_id);
+
+        // then
+        Assertions.assertThat(find_pub.getPublish_boardgames().size()).isEqualTo(3);
+        for (Boardgame each : find_pub.getPublish_boardgames()) {
+            Assertions.assertThat(each.getPublisher().getKor_name()).isEqualTo("코리아 보드게임즈");
+        }
+    }
+
+    @Test
+    public void 보드게임_포스트_test() {
+        // given
+
+        // when
+
+        // then
+
+    }
 }

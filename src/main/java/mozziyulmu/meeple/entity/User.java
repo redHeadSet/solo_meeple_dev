@@ -27,6 +27,10 @@ public class User{
     @NotNull
     private String nick_name;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Images user_profile_image;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<OwnBoardgames> ownBoardgames = new ArrayList<>();
 
@@ -57,5 +61,9 @@ public class User{
     // 평가한 보드게임
     public void addEvaluateBoardgame(Boardgame boardgame) {
         evaluateBoardgames.add(new EvaluateBoardgames(this, boardgame));
+    }
+
+    public void setProfileImage(Images images) {
+        user_profile_image = images;
     }
 }

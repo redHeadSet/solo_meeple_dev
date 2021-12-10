@@ -1,4 +1,4 @@
-package mozziyulmu.meeple.entity;
+package mozziyulmu.meeple.entity.enums;
 
 public enum DifficultyGrade {
     EASY, MIDDLE, HARD, MASTER
