@@ -43,14 +43,18 @@ public class User{
         this.nick_name = nick_name;
     }
 
+    // 사용자가 보드게임 각각을 추가 가능
+    // 가지고 있는 보드게임
     public void addOwnBoardgame(Boardgame boardgame) {
         ownBoardgames.add(new OwnBoardgames(this, boardgame));
     }
 
+    // 흥미있는 보드게임
     public void addInterestBoardgame(Boardgame boardgame) {
         interestBoardgames.add(new InterestBoardgames(this, boardgame));
     }
 
+    // 평가한 보드게임
     public void addEvaluateBoardgame(Boardgame boardgame) {
         evaluateBoardgames.add(new EvaluateBoardgames(this, boardgame));
     }

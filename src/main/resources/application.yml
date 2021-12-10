@@ -6,11 +6,14 @@ spring:
     password: mysql
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create # 자동 Table 생성 및 app 종료 시 제거
+    #      ddl-auto: none
     properties:
       hibernate:
-      # show_sql: true
-      format_sql: true
+        show_sql: true    # sql 문을 보여줌 : system.out
+        format_sql: true  # 문장을 물음표 표시 말고 값을 보여줌
+        default_batch_fetch_size: 100 # LAZY 로딩 시 조인 쿼리 내 IN 값의 수
+
 logging.level:
   org.hibernate.SQL: debug
   # org.hibernate.type: trace

@@ -3,8 +3,6 @@ package mozziyulmu.meeple.entity;
 import lombok.*;
 import mozziyulmu.meeple.entity.BaseEntity.BaseUserData;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.BoardMechaRT;
-import mozziyulmu.meeple.entity.Relation.BoardUser.BoardgameUserRT;
-import mozziyulmu.meeple.entity.Relation.BoardUser.OwnBoardgames;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -46,19 +44,19 @@ public class Boardgame extends BaseUserData {
     private String geek_link;   // 긱 링크
     private double geek_weight; // 긱 웨이트
 
-//    @OneToMany(mappedBy = "boardgame")
-//    List<BoardMechaRT> mechanisms = new ArrayList<>();
-//
-//    public void initMechanism(Mechanism... inputMachanisms){
-//        mechanisms.clear();
-//        for (Mechanism eachMechanism : inputMachanisms){
-//            addMechanism(eachMechanism);
-//        }
-//    }
-//
-//    public BoardMechaRT addMechanism(Mechanism mechanism){
-//        BoardMechaRT boardMechaRT = new BoardMechaRT(this, mechanism);
-//        boardMechaRT.addBoth();
-//        return boardMechaRT;
-//    }
+    @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
+    List<BoardMechaRT> mechanisms = new ArrayList<>();
+
+    // ========================================================================
+    // 보드게임에서 매커니즘 추가 가능, 반대는 불가능
+    public void initMechanism(Mechanism... inputMachanisms){
+        mechanisms.clear();
+        for (Mechanism eachMechanism : inputMachanisms){
+            addMechanism(eachMechanism);
+        }
+    }
+
+    public void addMechanism(Mechanism mechanism){
+        mechanisms.add(new BoardMechaRT(this, mechanism));
+    }
 }
