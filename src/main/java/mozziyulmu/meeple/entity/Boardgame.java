@@ -2,6 +2,7 @@ package mozziyulmu.meeple.entity;
 
 import lombok.*;
 import mozziyulmu.meeple.entity.BaseEntity.BaseUserData;
+import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.BoardMechaRT;
 
 import javax.persistence.*;
@@ -47,8 +48,11 @@ public class Boardgame extends BaseUserData {
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
     List<BoardMechaRT> mechanisms = new ArrayList<>();
 
+    @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
+    List<BoardCateRT> categorys = new ArrayList<>();
+
     // ========================================================================
-    // 보드게임에서 매커니즘 추가 가능, 반대는 불가능
+    // 보드게임에서 매커니즘 추가 가능(cascade), 반대는 불가능
     public void initMechanism(Mechanism... inputMachanisms){
         mechanisms.clear();
         for (Mechanism eachMechanism : inputMachanisms){
@@ -58,5 +62,18 @@ public class Boardgame extends BaseUserData {
 
     public void addMechanism(Mechanism mechanism){
         mechanisms.add(new BoardMechaRT(this, mechanism));
+    }
+
+    // 위와 동일
+    // 보드게임에서 카테고리 추가 가능(cascade), 반대는 불가능
+    public void initCategorys(Category... inputCategorys){
+        categorys.clear();
+        for (Category eachCategory : inputCategorys){
+            addCategory(eachCategory);
+        }
+    }
+
+    public void addCategory(Category category){
+        categorys.add(new BoardCateRT(this, category));
     }
 }

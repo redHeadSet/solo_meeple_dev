@@ -1,5 +1,6 @@
 package mozziyulmu.meeple.entity;
 
+import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.BoardMechaRT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,6 @@ class UserTest {
         Assertions.assertThat(finded_user.evaluateBoardgames.size()).isEqualTo(2);
     }
 
-    @Commit
     @Test
     public void 보드게임_메커니즘_test() {
         // given
@@ -94,5 +94,45 @@ class UserTest {
             System.out.print(each.getMechanism().getKor_name() + ", ");
         }
         System.out.println();
+    }
+
+    @Test
+    public void 보드게임_카테고리_test() {
+        // given
+        Boardgame bg1 = new Boardgame(); bg1.setKor_name("테포마"); em.persist(bg1);
+        Boardgame bg2 = new Boardgame(); bg2.setKor_name("아딱"); em.persist(bg2);
+
+        Category ct1 = new Category("우주", "space"); em.persist(ct1);
+        Category ct2 = new Category("괴물", "monster"); em.persist(ct2);
+        bg1.initCategorys(ct1);
+        bg2.initCategorys(ct2);
+
+        Category ct3 = new Category("기업", "company"); em.persist(ct3);
+        bg1.addCategory(ct3);
+
+        Category ct4 = new Category("테스트 공통", "test"); em.persist(ct4);
+        bg1.addCategory(ct4);
+        bg2.addCategory(ct4);
+
+        Long bg1Id = bg1.getId();
+        Long bg2Id = bg2.getId();
+        Long ct4Id = ct4.getId();
+
+        em.flush(); em.clear();
+
+        // when
+        Boardgame boardgame1 = em.find(Boardgame.class, bg1Id);
+        Boardgame boardgame2 = em.find(Boardgame.class, bg2Id);
+        Category category = em.find(Category.class, ct4Id);
+
+        // then
+        Assertions.assertThat(category.getBoardgames().size()).isEqualTo(2);
+        System.out.println(category.getKor_name() + " 카테고리의 보드게임 총 " + category.getBoardgames().size() + "개");
+        for (BoardCateRT each : category.getBoardgames()) {
+            System.out.println("이름 : " + each.getBoardgame().getKor_name());
+        }
+
+        Assertions.assertThat(boardgame1.getCategorys().size()).isEqualTo(3);
+        Assertions.assertThat(boardgame2.getCategorys().size()).isEqualTo(2);
     }
 }
