@@ -1,6 +1,9 @@
 package mozziyulmu.meeple.entity;
 
+import com.sun.istack.NotNull;
 import lombok.*;
+import mozziyulmu.meeple.entity.Relation.BoardUser.EvaluateBoardgames;
+import mozziyulmu.meeple.entity.Relation.BoardUser.InterestBoardgames;
 import mozziyulmu.meeple.entity.Relation.BoardUser.OwnBoardgames;
 
 import javax.persistence.*;
@@ -9,26 +12,46 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"e_mail"})
+@ToString(of = {"e_mail", "password", "nick_name"})
 public class User{
     @Id
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
+    @NotNull
     private String e_mail;
+    @NotNull
     private String password;
+    @NotNull
     private String nick_name;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<OwnBoardgames> ownBoardgames = new ArrayList<>();
 
-    // ========================================================
-    public OwnBoardgames addOwnBoardgame(Boardgame boardgame) {
-        OwnBoardgames newOwnBgData = new OwnBoardgames(this, boardgame);
-        ownBoardgames.add(newOwnBgData);
-        return newOwnBgData;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<InterestBoardgames> interestBoardgames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<EvaluateBoardgames> evaluateBoardgames = new ArrayList<>();
+
+    // =================================================================================
+    public User(String e_mail, String password, String nick_name) {
+        this.e_mail = e_mail;
+        this.password = password;
+        this.nick_name = nick_name;
+    }
+
+    public void addOwnBoardgame(Boardgame boardgame) {
+        ownBoardgames.add(new OwnBoardgames(this, boardgame));
+    }
+
+    public void addInterestBoardgame(Boardgame boardgame) {
+        interestBoardgames.add(new InterestBoardgames(this, boardgame));
+    }
+
+    public void addEvaluateBoardgame(Boardgame boardgame) {
+        evaluateBoardgames.add(new EvaluateBoardgames(this, boardgame));
     }
 }

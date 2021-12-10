@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "boardgame_user_rt")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorColumn(name = "list_type")
 public abstract class BoardgameUserRT extends BaseTimeData {
@@ -30,19 +30,7 @@ public abstract class BoardgameUserRT extends BaseTimeData {
     @JoinColumn(name = "boardgame_id")
     private Boardgame boardgame;
 
-//    private List<Boardgame> own_boardgames = new ArrayList<>();        // 가지고 있는
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "boardgame_id")
-//    private List<Boardgame> interest_boardgames = new ArrayList<>();   // 흥미있는
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "boardgame_id")
-//    private List<Boardgame> evaluate_boardgames = new ArrayList<>();   // 평가한
-
     public BoardgameUserRT(User user, Boardgame boardgame){
-        setData(user, boardgame);
-    }
-
-    public void setData(User user, Boardgame boardgame){
         this.user = user;
         this.boardgame = boardgame;
     }

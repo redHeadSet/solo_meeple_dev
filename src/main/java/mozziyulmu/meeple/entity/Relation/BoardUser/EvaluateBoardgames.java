@@ -8,12 +8,12 @@ import mozziyulmu.meeple.entity.User;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-// 가지고 있는 보드게임
+// 평가한 보드게임
 @Entity
-@DiscriminatorValue("own")
+@DiscriminatorValue("evaluate")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OwnBoardgames extends BoardgameUserRT{
-    public OwnBoardgames(User user, Boardgame boardgame) {
+public class EvaluateBoardgames extends BoardgameUserRT{
+    public EvaluateBoardgames(User user, Boardgame boardgame) {
         super(user, boardgame);
     }
 }
