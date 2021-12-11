@@ -25,18 +25,18 @@ public class Boardgame extends BaseUserData {
     private Long id;
 
     @Column(name = "boardgame_kor_name")
-    private String kor_name;
+    private String korName;
     @Column(name = "boardgame_eng_name")
-    private String eng_name;
+    private String engName;
 
-    private int published_year; // 출시년도
+    private int publishedYear; // 출시년도
 
-    private int min_player;
-    private int max_player;
-    private int optimal_player; // 최적 게임 인원
+    private int minPlayer;
+    private int maxPlayer;
+    private int optimalPlayer; // 최적 게임 인원
 
-    private int min_playing_minute;
-    private int max_playing_minute;
+    private int minPlayingMinute;
+    private int maxPlayingMinute;
 
     private int age; // 권장 나이
 
@@ -47,10 +47,10 @@ public class Boardgame extends BaseUserData {
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
-    private Long geek_id;       // 긱 고유 번호
-    private Double geek_rating; // 긱 레이팅
-    private String geek_link;   // 긱 링크
-    private Double geek_weight; // 긱 웨이트
+    private Long geekId;       // 긱 고유 번호
+    private Double geekRating; // 긱 레이팅
+    private String geekLink;   // 긱 링크
+    private Double geekWeight; // 긱 웨이트
 
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
     List<BoardMechaRT> mechanisms = new ArrayList<>();
@@ -62,7 +62,7 @@ public class Boardgame extends BaseUserData {
     List<Images> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "boardgame")
-    List<BoardPostRT> relate_posts = new ArrayList<>();
+    List<BoardPostRT> relatePosts = new ArrayList<>();
 
     // ========================================================================
     public void addGameImage(Images image) {

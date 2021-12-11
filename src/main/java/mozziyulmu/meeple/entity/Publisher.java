@@ -19,15 +19,15 @@ public class Publisher extends BaseUserData {
     private Long id;
 
     @Column(name = "publisher_kor_name")
-    private String kor_name;
+    private String korName;
     @Column(name = "publisher_eng_name")
-    private String eng_name;
+    private String engName;
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
-    List<Boardgame> publish_boardgames = new ArrayList<>();
+    List<Boardgame> publishBoardgames = new ArrayList<>();
 
     public Publisher(String kor_name, String eng_name) {
-        this.kor_name = kor_name;
-        this.eng_name = eng_name;
+        this.korName = kor_name;
+        this.engName = eng_name;
     }
 }

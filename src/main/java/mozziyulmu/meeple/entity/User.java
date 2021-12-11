@@ -22,15 +22,15 @@ public class User extends BaseTimeData {
     private Long id;
 
     @NotNull
-    private String e_mail;
+    private String eMail;
     @NotNull
     private String password;
     @NotNull
-    private String nick_name;
+    private String nickName;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
-    private Images user_profile_image;
+    private Images userProfileImage;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<OwnBoardgames> ownBoardgames = new ArrayList<>();
@@ -46,9 +46,9 @@ public class User extends BaseTimeData {
 
     // =================================================================================
     public User(String e_mail, String password, String nick_name) {
-        this.e_mail = e_mail;
+        this.eMail = e_mail;
         this.password = password;
-        this.nick_name = nick_name;
+        this.nickName = nick_name;
     }
 
     // 사용자가 보드게임 각각을 추가 가능
@@ -68,6 +68,6 @@ public class User extends BaseTimeData {
     }
 
     public void setProfileImage(Images images) {
-        user_profile_image = images;
+        userProfileImage = images;
     }
 }

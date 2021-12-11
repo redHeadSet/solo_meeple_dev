@@ -20,9 +20,9 @@ public class Category extends BaseUserData {
     private Long id;
 
     @Column(name = "category_kor_name")
-    private String kor_name;
+    private String korName;
     @Column(name = "category_eng_name")
-    private String eng_name;
+    private String engName;
 
     @OneToMany(mappedBy = "category")
     List<BoardCateRT> boardgames = new ArrayList<>();
@@ -30,7 +30,7 @@ public class Category extends BaseUserData {
     // ========================================================================
     // 보드게임에서 매커니즘 추가 가능, 반대는 불가능
     public Category(String kor_name, String eng_name) {
-        this.kor_name = kor_name;
-        this.eng_name = eng_name;
+        this.korName = kor_name;
+        this.engName = eng_name;
     }
 }

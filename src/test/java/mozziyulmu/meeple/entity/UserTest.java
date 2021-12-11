@@ -4,7 +4,6 @@ import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.BoardMechaRT;
 import mozziyulmu.meeple.entity.Relation.BoardPost.BoardPostRT;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +11,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -80,65 +78,65 @@ class UserTest {
         Category ct12 = setCategory("주사위", "Dice");
 
         terraforming_mars = new Boardgame();
-        terraforming_mars.setKor_name("테라포밍 마스");
-        terraforming_mars.setEng_name("terraforming mars");
-        terraforming_mars.setPublished_year(2016);
-        terraforming_mars.setMin_player(1);
-        terraforming_mars.setMax_player(5);
-        terraforming_mars.setOptimal_player(3);
+        terraforming_mars.setKorName("테라포밍 마스");
+        terraforming_mars.setEngName("terraforming mars");
+        terraforming_mars.setPublishedYear(2016);
+        terraforming_mars.setMinPlayer(1);
+        terraforming_mars.setMaxPlayer(5);
+        terraforming_mars.setOptimalPlayer(3);
         terraforming_mars.setDifficulty(DifficultyGrade.MIDDLE);
         terraforming_mars.setPublisher(kbg);
-        terraforming_mars.setGeek_id(Long.valueOf(167791));
-        terraforming_mars.setGeek_link("https://boardgamegeek.com/boardgame/167791/terraforming-mars");
-        terraforming_mars.setGeek_weight(Double.valueOf(3.24));
+        terraforming_mars.setGeekId(Long.valueOf(167791));
+        terraforming_mars.setGeekLink("https://boardgamegeek.com/boardgame/167791/terraforming-mars");
+        terraforming_mars.setGeekWeight(Double.valueOf(3.24));
         terraforming_mars.initMechanism(mech1, mech2, mech3, mech4, mech5, mech6, mech7);
         terraforming_mars.initCategorys(ct1, ct2, ct3, ct4, ct5);
         em.persist(terraforming_mars);
 
         gloom_haven = new Boardgame();
-        gloom_haven.setKor_name("글룸 헤이븐");
-        gloom_haven.setEng_name("Gloom Haven");
-        gloom_haven.setPublished_year(2017);
-        gloom_haven.setMin_player(1);
-        gloom_haven.setMax_player(4);
-        gloom_haven.setOptimal_player(3);
+        gloom_haven.setKorName("글룸 헤이븐");
+        gloom_haven.setEngName("Gloom Haven");
+        gloom_haven.setPublishedYear(2017);
+        gloom_haven.setMinPlayer(1);
+        gloom_haven.setMaxPlayer(4);
+        gloom_haven.setOptimalPlayer(3);
         gloom_haven.setDifficulty(DifficultyGrade.MIDDLE);
         gloom_haven.setPublisher(kbg);
-        gloom_haven.setGeek_id(Long.valueOf(174430));
-        gloom_haven.setGeek_link("https://boardgamegeek.com/boardgame/174430");
-        gloom_haven.setGeek_weight(Double.valueOf(3.87));
+        gloom_haven.setGeekId(Long.valueOf(174430));
+        gloom_haven.setGeekLink("https://boardgamegeek.com/boardgame/174430");
+        gloom_haven.setGeekWeight(Double.valueOf(3.87));
         gloom_haven.initMechanism(mech4, mech6, mech7, mech8, mech9, mech10, mech11);
         gloom_haven.initCategorys(ct6, ct7, ct8, ct9, ct10);
         em.persist(gloom_haven);
         
         brass_birmingham = new Boardgame();
-        brass_birmingham.setKor_name("브라스:버밍엄");
-        brass_birmingham.setEng_name("Brass:birmingham");
-        brass_birmingham.setPublished_year(2018);
-        brass_birmingham.setMin_player(2);
-        brass_birmingham.setMax_player(4);
-        brass_birmingham.setOptimal_player(3);
+        brass_birmingham.setKorName("브라스:버밍엄");
+        brass_birmingham.setEngName("Brass:birmingham");
+        brass_birmingham.setPublishedYear(2018);
+        brass_birmingham.setMinPlayer(2);
+        brass_birmingham.setMaxPlayer(4);
+        brass_birmingham.setOptimalPlayer(3);
         brass_birmingham.setDifficulty(DifficultyGrade.HARD);
         brass_birmingham.setPublisher(bm);
-        brass_birmingham.setGeek_id(Long.valueOf(224517));
-        brass_birmingham.setGeek_link("https://boardgamegeek.com/boardgame/224517");
-        brass_birmingham.setGeek_weight(Double.valueOf(3.91));
+        brass_birmingham.setGeekId(Long.valueOf(224517));
+        brass_birmingham.setGeekLink("https://boardgamegeek.com/boardgame/224517");
+        brass_birmingham.setGeekWeight(Double.valueOf(3.91));
         brass_birmingham.initMechanism(mech12, mech13, mech14, mech15);
         brass_birmingham.initCategorys(ct1, ct3, ct11);
         em.persist(brass_birmingham);
         
         castles_of_burgundy = new Boardgame();
-        castles_of_burgundy.setKor_name("버건디의 성");
-        castles_of_burgundy.setEng_name("The castles of burgundy");
-        castles_of_burgundy.setPublished_year(2011);
-        castles_of_burgundy.setMin_player(2);
-        castles_of_burgundy.setMax_player(4);
-        castles_of_burgundy.setOptimal_player(2);
+        castles_of_burgundy.setKorName("버건디의 성");
+        castles_of_burgundy.setEngName("The castles of burgundy");
+        castles_of_burgundy.setPublishedYear(2011);
+        castles_of_burgundy.setMinPlayer(2);
+        castles_of_burgundy.setMaxPlayer(4);
+        castles_of_burgundy.setOptimalPlayer(2);
         castles_of_burgundy.setDifficulty(DifficultyGrade.EASY);
         castles_of_burgundy.setPublisher(rbg);
-        castles_of_burgundy.setGeek_id(Long.valueOf(84876));
-        castles_of_burgundy.setGeek_link("https://boardgamegeek.com/boardgame/84876");
-        castles_of_burgundy.setGeek_weight(Double.valueOf(3.00));
+        castles_of_burgundy.setGeekId(Long.valueOf(84876));
+        castles_of_burgundy.setGeekLink("https://boardgamegeek.com/boardgame/84876");
+        castles_of_burgundy.setGeekWeight(Double.valueOf(3.00));
         castles_of_burgundy.initMechanism(mech3, mech4, mech5, mech6, mech16);
         castles_of_burgundy.initCategorys(ct12);
         em.persist(castles_of_burgundy);
@@ -154,10 +152,10 @@ class UserTest {
     @Test
     public void 보드게임_유저_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKor_name("테포마"); em.persist(bg1);
-        Boardgame bg2 = new Boardgame(); bg2.setKor_name("니다벨리르");  em.persist(bg2);
-        Boardgame bg3 = new Boardgame(); bg3.setKor_name("팬거시");    em.persist(bg3);
-        Boardgame bg4 = new Boardgame(); bg4.setKor_name("아딱"); em.persist(bg4);
+        Boardgame bg1 = new Boardgame(); bg1.setKorName("테포마"); em.persist(bg1);
+        Boardgame bg2 = new Boardgame(); bg2.setKorName("니다벨리르");  em.persist(bg2);
+        Boardgame bg3 = new Boardgame(); bg3.setKorName("팬거시");    em.persist(bg3);
+        Boardgame bg4 = new Boardgame(); bg4.setKorName("아딱"); em.persist(bg4);
 
         User user = new User("stikfas7@naver.com", "1234", "한재");
         user.addOwnBoardgame(bg1);
@@ -187,8 +185,8 @@ class UserTest {
     @Test
     public void 보드게임_메커니즘_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKor_name("테포마"); em.persist(bg1);
-        Boardgame bg2 = new Boardgame(); bg2.setKor_name("팬거시");  em.persist(bg2);
+        Boardgame bg1 = new Boardgame(); bg1.setKorName("테포마"); em.persist(bg1);
+        Boardgame bg2 = new Boardgame(); bg2.setKorName("팬거시");  em.persist(bg2);
 
         Mechanism mech1 = new Mechanism("엔진", "engine"); em.persist(mech1);
         Mechanism mech2 = new Mechanism("셋콜렉션", "set collection"); em.persist(mech2);
@@ -214,16 +212,16 @@ class UserTest {
         // then
         // 비효율적으로 쿼리가 나가는데, Repository에서 fetch join 처리 필요할 듯
         Assertions.assertThat(boardgame1.getMechanisms().size()).isEqualTo(5);
-        System.out.print(boardgame1.getKor_name() + "의 매커니즘 : ");
+        System.out.print(boardgame1.getKorName() + "의 매커니즘 : ");
         for (BoardMechaRT each : boardgame1.getMechanisms()) {
-            System.out.print(each.getMechanism().getKor_name() + ", ");
+            System.out.print(each.getMechanism().getKorName() + ", ");
         }
         System.out.println();
 
         Assertions.assertThat(boardgame2.getMechanisms().size()).isEqualTo(3);
-        System.out.print(boardgame2.getKor_name() + "의 매커니즘 : ");
+        System.out.print(boardgame2.getKorName() + "의 매커니즘 : ");
         for (BoardMechaRT each : boardgame2.getMechanisms()) {
-            System.out.print(each.getMechanism().getKor_name() + ", ");
+            System.out.print(each.getMechanism().getKorName() + ", ");
         }
         System.out.println();
     }
@@ -231,8 +229,8 @@ class UserTest {
     @Test
     public void 보드게임_카테고리_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKor_name("테포마"); em.persist(bg1);
-        Boardgame bg2 = new Boardgame(); bg2.setKor_name("아딱"); em.persist(bg2);
+        Boardgame bg1 = new Boardgame(); bg1.setKorName("테포마"); em.persist(bg1);
+        Boardgame bg2 = new Boardgame(); bg2.setKorName("아딱"); em.persist(bg2);
 
         Category ct1 = new Category("우주", "space"); em.persist(ct1);
         Category ct2 = new Category("괴물", "monster"); em.persist(ct2);
@@ -259,9 +257,9 @@ class UserTest {
 
         // then
         Assertions.assertThat(category.getBoardgames().size()).isEqualTo(2);
-        System.out.println(category.getKor_name() + " 카테고리의 보드게임 총 " + category.getBoardgames().size() + "개");
+        System.out.println(category.getKorName() + " 카테고리의 보드게임 총 " + category.getBoardgames().size() + "개");
         for (BoardCateRT each : category.getBoardgames()) {
-            System.out.println("이름 : " + each.getBoardgame().getKor_name());
+            System.out.println("이름 : " + each.getBoardgame().getKorName());
         }
 
         Assertions.assertThat(boardgame1.getCategorys().size()).isEqualTo(3);
@@ -277,7 +275,7 @@ class UserTest {
         Long userId = user.getId();
 
         Boardgame bg = new Boardgame();
-        bg.setKor_name("테포마");
+        bg.setKorName("테포마");
         bg.addGameImage(new Images("C:\\terraforming_mars1.jpg", bg));
         bg.addGameImage(new Images("C:\\add\\terraforming_mars2.jpg", bg));
         bg.addGameImage(new Images("C:\\remove\\terraforming_mars3.jpg", bg));
@@ -291,9 +289,9 @@ class UserTest {
         Boardgame boardgame = em.find(Boardgame.class, bgid);
 
         // then
-        String path = user1.getUser_profile_image().getPath();
+        String path = user1.getUserProfileImage().getPath();
         Assertions.assertThat(path).isEqualTo("D:\\aaa.jpg");
-        System.out.println(user1.getNick_name() + "님의 이미지는 " + path + "에 있다");
+        System.out.println(user1.getNickName() + "님의 이미지는 " + path + "에 있다");
 
         List<Images> images = boardgame.getImages();
         Assertions.assertThat(images.size()).isEqualTo(3);
@@ -311,15 +309,15 @@ class UserTest {
         Long pub_id = publisher.getId();
 
         Boardgame bg1 = new Boardgame();
-        bg1.setKor_name("테포마");
+        bg1.setKorName("테포마");
         bg1.setPublisher(publisher);
         em.persist(bg1);
         Boardgame bg2 = new Boardgame();
-        bg2.setKor_name("아딱");
+        bg2.setKorName("아딱");
         bg2.setPublisher(publisher);
         em.persist(bg2);
         Boardgame bg3 = new Boardgame();
-        bg3.setKor_name("돌팔이약장수");
+        bg3.setKorName("돌팔이약장수");
         bg3.setPublisher(publisher);
         em.persist(bg3);
 
@@ -329,13 +327,12 @@ class UserTest {
         Publisher find_pub = em.find(Publisher.class, pub_id);
 
         // then
-        Assertions.assertThat(find_pub.getPublish_boardgames().size()).isEqualTo(3);
-        for (Boardgame each : find_pub.getPublish_boardgames()) {
-            Assertions.assertThat(each.getPublisher().getKor_name()).isEqualTo("코리아 보드게임즈");
+        Assertions.assertThat(find_pub.getPublishBoardgames().size()).isEqualTo(3);
+        for (Boardgame each : find_pub.getPublishBoardgames()) {
+            Assertions.assertThat(each.getPublisher().getKorName()).isEqualTo("코리아 보드게임즈");
         }
     }
 
-    @Commit
     @Test
     public void 보드게임_포스트_test() {
         // given
@@ -362,8 +359,8 @@ class UserTest {
         Post finded_post = em.find(Post.class, postId);
 
         // then
-        Assertions.assertThat(finded_post.getRelate_boardgames().size()).isEqualTo(2);
-        for(BoardPostRT bprt : finded_post.getRelate_boardgames()){
+        Assertions.assertThat(finded_post.getRelateBoardgames().size()).isEqualTo(2);
+        for(BoardPostRT bprt : finded_post.getRelateBoardgames()){
             Long this_boardgame_id = bprt.getBoardgame().getId();
             if((this_boardgame_id != terraforming_marsId)
                 && (this_boardgame_id != gloom_havenId)){
@@ -372,8 +369,8 @@ class UserTest {
                         + "]");
             }
 
-            System.out.println(bprt.getBoardgame().getKor_name() + "와 관계된 포스트 : "
-                    + bprt.getBoardgame().getRelate_posts().size() + "개");
+            System.out.println(bprt.getBoardgame().getKorName() + "와 관계된 포스트 : "
+                    + bprt.getBoardgame().getRelatePosts().size() + "개");
         }
 
     }

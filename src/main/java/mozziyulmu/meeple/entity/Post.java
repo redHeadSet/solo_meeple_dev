@@ -28,7 +28,7 @@ public class Post extends BaseUserData {
     List<Images> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    List<BoardPostRT> relate_boardgames = new ArrayList<>();
+    List<BoardPostRT> relateBoardgames = new ArrayList<>();
 
     // ==========================================================
     public Post(String title) {
@@ -40,7 +40,7 @@ public class Post extends BaseUserData {
     }
 
     public void addRelateBoardgame(Boardgame boardgame) {
-        relate_boardgames.add(new BoardPostRT(boardgame, this));
+        relateBoardgames.add(new BoardPostRT(boardgame, this));
     }
 
     public void addImage(Images images) {

@@ -24,7 +24,7 @@ public class Images extends BaseUserData {
     @JoinColumn(name = "boardgame_id")
     private Boardgame boardgame;
 
-    @OneToOne(mappedBy = "user_profile_image")
+    @OneToOne(mappedBy = "userProfileImage")
     private User user;
 
     @ManyToOne
