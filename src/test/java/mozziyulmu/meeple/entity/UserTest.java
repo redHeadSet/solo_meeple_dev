@@ -2,7 +2,9 @@ package mozziyulmu.meeple.entity;
 
 import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.BoardMechaRT;
+import mozziyulmu.meeple.entity.Relation.BoardPost.BoardPostRT;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,11 +20,141 @@ import java.util.List;
 class UserTest {
     @Autowired
     public EntityManager em;
+    Boardgame terraforming_mars;
+    Boardgame gloom_haven;
+    Boardgame brass_birmingham;
+    Boardgame castles_of_burgundy;
+
+    public Publisher setPublisher(String kor_name, String eng_name) {
+        Publisher publisher = new Publisher(kor_name, eng_name);
+        em.persist(publisher);
+        return publisher;
+    }
+
+    public Mechanism setMechanism(String kor_name, String eng_name) {
+        Mechanism mechanism = new Mechanism(kor_name, eng_name);
+        em.persist(mechanism);
+        return mechanism;
+    }
+
+    public Category setCategory(String kor_name, String eng_name) {
+        Category category = new Category(kor_name, eng_name);
+        em.persist(category);
+        return category;
+    }
+
+    //    @BeforeEach
+    public void setDefault() {
+        Publisher kbg = setPublisher("코리아 보드게임즈", "Korea Boardgames");
+        Publisher bm = setPublisher("보드엠", "BoardM Factory");
+        Publisher rbg = setPublisher("라벤스부르거", "Ravensburger");
+
+        Mechanism mech1 = setMechanism("엔진", "engine");
+        Mechanism mech2 = setMechanism("셋콜렉션", "set collection");
+        Mechanism mech3 = setMechanism("타일 놓기", "tile placement");
+        Mechanism mech4 = setMechanism("홀로 플레이", "solo play");
+        Mechanism mech5 = setMechanism("경쟁", "take that");
+        Mechanism mech6 = setMechanism("6각 격자", "hexagon grid");
+        Mechanism mech7 = setMechanism("턴제", "turn order");
+        Mechanism mech8 = setMechanism("액션 큐 방식", "Action queue");
+        Mechanism mech9 = setMechanism("캠페인", "Campaign");
+        Mechanism mech10 = setMechanism("소통 제한", "Communication limit");
+        Mechanism mech11 = setMechanism("덱 빌딩", "Deck building");
+        Mechanism mech12 = setMechanism("극한 경영", "Hard Management");
+        Mechanism mech13 = setMechanism("대출", "Loans");
+        Mechanism mech14 = setMechanism("시장", "Market");
+        Mechanism mech15 = setMechanism("네트워크 경로 구성", "Network building");
+        Mechanism mech16 = setMechanism("주사위 굴림", "Dice Rolling");
+
+        Category ct1 = setCategory("경제", "Economic");
+        Category ct2 = setCategory("환경", "Environment");
+        Category ct3 = setCategory("산업", "Industry");
+        Category ct4 = setCategory("과학", "Science");
+        Category ct5 = setCategory("우주", "Space");
+        Category ct6 = setCategory("어드벤쳐", "Adventure");
+        Category ct7 = setCategory("탐험", "Exploration");
+        Category ct8 = setCategory("판타지", "Fantasy");
+        Category ct9 = setCategory("대결, 싸움", "Fighting");
+        Category ct10 = setCategory("미니어처", "Miniature");
+        Category ct11 = setCategory("운송", "Transportation");
+        Category ct12 = setCategory("주사위", "Dice");
+
+        terraforming_mars = new Boardgame();
+        terraforming_mars.setKor_name("테라포밍 마스");
+        terraforming_mars.setEng_name("terraforming mars");
+        terraforming_mars.setPublished_year(2016);
+        terraforming_mars.setMin_player(1);
+        terraforming_mars.setMax_player(5);
+        terraforming_mars.setOptimal_player(3);
+        terraforming_mars.setDifficulty(DifficultyGrade.MIDDLE);
+        terraforming_mars.setPublisher(kbg);
+        terraforming_mars.setGeek_id(Long.valueOf(167791));
+        terraforming_mars.setGeek_link("https://boardgamegeek.com/boardgame/167791/terraforming-mars");
+        terraforming_mars.setGeek_weight(Double.valueOf(3.24));
+        terraforming_mars.initMechanism(mech1, mech2, mech3, mech4, mech5, mech6, mech7);
+        terraforming_mars.initCategorys(ct1, ct2, ct3, ct4, ct5);
+        em.persist(terraforming_mars);
+
+        gloom_haven = new Boardgame();
+        gloom_haven.setKor_name("글룸 헤이븐");
+        gloom_haven.setEng_name("Gloom Haven");
+        gloom_haven.setPublished_year(2017);
+        gloom_haven.setMin_player(1);
+        gloom_haven.setMax_player(4);
+        gloom_haven.setOptimal_player(3);
+        gloom_haven.setDifficulty(DifficultyGrade.MIDDLE);
+        gloom_haven.setPublisher(kbg);
+        gloom_haven.setGeek_id(Long.valueOf(174430));
+        gloom_haven.setGeek_link("https://boardgamegeek.com/boardgame/174430");
+        gloom_haven.setGeek_weight(Double.valueOf(3.87));
+        gloom_haven.initMechanism(mech4, mech6, mech7, mech8, mech9, mech10, mech11);
+        gloom_haven.initCategorys(ct6, ct7, ct8, ct9, ct10);
+        em.persist(gloom_haven);
+        
+        brass_birmingham = new Boardgame();
+        brass_birmingham.setKor_name("브라스:버밍엄");
+        brass_birmingham.setEng_name("Brass:birmingham");
+        brass_birmingham.setPublished_year(2018);
+        brass_birmingham.setMin_player(2);
+        brass_birmingham.setMax_player(4);
+        brass_birmingham.setOptimal_player(3);
+        brass_birmingham.setDifficulty(DifficultyGrade.HARD);
+        brass_birmingham.setPublisher(bm);
+        brass_birmingham.setGeek_id(Long.valueOf(224517));
+        brass_birmingham.setGeek_link("https://boardgamegeek.com/boardgame/224517");
+        brass_birmingham.setGeek_weight(Double.valueOf(3.91));
+        brass_birmingham.initMechanism(mech12, mech13, mech14, mech15);
+        brass_birmingham.initCategorys(ct1, ct3, ct11);
+        em.persist(brass_birmingham);
+        
+        castles_of_burgundy = new Boardgame();
+        castles_of_burgundy.setKor_name("버건디의 성");
+        castles_of_burgundy.setEng_name("The castles of burgundy");
+        castles_of_burgundy.setPublished_year(2011);
+        castles_of_burgundy.setMin_player(2);
+        castles_of_burgundy.setMax_player(4);
+        castles_of_burgundy.setOptimal_player(2);
+        castles_of_burgundy.setDifficulty(DifficultyGrade.EASY);
+        castles_of_burgundy.setPublisher(rbg);
+        castles_of_burgundy.setGeek_id(Long.valueOf(84876));
+        castles_of_burgundy.setGeek_link("https://boardgamegeek.com/boardgame/84876");
+        castles_of_burgundy.setGeek_weight(Double.valueOf(3.00));
+        castles_of_burgundy.initMechanism(mech3, mech4, mech5, mech6, mech16);
+        castles_of_burgundy.initCategorys(ct12);
+        em.persist(castles_of_burgundy);
+
+        User user = new User("stikfas7@naver.com", "1234", "한재");
+        user.addOwnBoardgame(terraforming_mars);
+        user.addOwnBoardgame(gloom_haven);
+        user.addInterestBoardgame(castles_of_burgundy);
+        user.addEvaluateBoardgame(brass_birmingham);
+        em.persist(user);
+    }
 
     @Test
     public void 보드게임_유저_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKor_name("테포마"); bg1.setPublished_date(LocalDateTime.now());em.persist(bg1);
+        Boardgame bg1 = new Boardgame(); bg1.setKor_name("테포마"); em.persist(bg1);
         Boardgame bg2 = new Boardgame(); bg2.setKor_name("니다벨리르");  em.persist(bg2);
         Boardgame bg3 = new Boardgame(); bg3.setKor_name("팬거시");    em.persist(bg3);
         Boardgame bg4 = new Boardgame(); bg4.setKor_name("아딱"); em.persist(bg4);
@@ -203,13 +335,46 @@ class UserTest {
         }
     }
 
+    @Commit
     @Test
     public void 보드게임_포스트_test() {
         // given
+        setDefault();
+        Post post = new Post("새 제목");
+        post.setComment("dkgkgkgkgkgkgkgk");
+        Images innerImage1 = new Images("post 이미지1", post);
+        Images innerImage2 = new Images("post 이미지2", post);
+        Images innerImage3 = new Images("post 이미지3", post);
+        post.addImage(innerImage1);
+        post.addImage(innerImage2);
+        post.addImage(innerImage3);
+        post.addRelateBoardgame(terraforming_mars);
+        post.addRelateBoardgame(gloom_haven);
+        em.persist(post);
+
+        Long postId = post.getId();
+        Long terraforming_marsId = terraforming_mars.getId();
+        Long gloom_havenId = gloom_haven.getId();
+
+        em.flush(); em.clear();
 
         // when
+        Post finded_post = em.find(Post.class, postId);
 
         // then
+        Assertions.assertThat(finded_post.getRelate_boardgames().size()).isEqualTo(2);
+        for(BoardPostRT bprt : finded_post.getRelate_boardgames()){
+            Long this_boardgame_id = bprt.getBoardgame().getId();
+            if((this_boardgame_id != terraforming_marsId)
+                && (this_boardgame_id != gloom_havenId)){
+                Assertions.fail("아이디 불일치" + this_boardgame_id
+                        + " vs [" + terraforming_marsId + " or " + gloom_havenId
+                        + "]");
+            }
+
+            System.out.println(bprt.getBoardgame().getKor_name() + "와 관계된 포스트 : "
+                    + bprt.getBoardgame().getRelate_posts().size() + "개");
+        }
 
     }
 }

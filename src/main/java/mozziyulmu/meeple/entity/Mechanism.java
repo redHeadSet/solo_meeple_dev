@@ -24,6 +24,8 @@ public class Mechanism extends BaseUserData {
     @Column(name = "mechanism_eng_name")
     private String eng_name;
 
+    private String description;
+
     @OneToMany(mappedBy = "mechanism")
     List<BoardMechaRT> boardgames = new ArrayList<>();
 
@@ -32,5 +34,9 @@ public class Mechanism extends BaseUserData {
     public Mechanism(String kor_name, String eng_name) {
         this.kor_name = kor_name;
         this.eng_name = eng_name;
+    }
+
+    public void setDesc(String description){
+        this.description = description;
     }
 }

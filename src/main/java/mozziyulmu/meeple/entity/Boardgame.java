@@ -4,10 +4,9 @@ import lombok.*;
 import mozziyulmu.meeple.entity.BaseEntity.BaseUserData;
 import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.BoardMechaRT;
-import mozziyulmu.meeple.entity.enums.*;
+import mozziyulmu.meeple.entity.Relation.BoardPost.BoardPostRT;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class Boardgame extends BaseUserData {
     @Column(name = "boardgame_eng_name")
     private String eng_name;
 
-    private LocalDateTime published_date; // 출시일
+    private int published_year; // 출시년도
 
     private int min_player;
     private int max_player;
@@ -49,9 +48,9 @@ public class Boardgame extends BaseUserData {
     private Publisher publisher;
 
     private Long geek_id;       // 긱 고유 번호
-    private double geek_rating; // 긱 레이팅
+    private Double geek_rating; // 긱 레이팅
     private String geek_link;   // 긱 링크
-    private double geek_weight; // 긱 웨이트
+    private Double geek_weight; // 긱 웨이트
 
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
     List<BoardMechaRT> mechanisms = new ArrayList<>();
@@ -61,6 +60,9 @@ public class Boardgame extends BaseUserData {
 
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
     List<Images> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "boardgame")
+    List<BoardPostRT> relate_posts = new ArrayList<>();
 
     // ========================================================================
     public void addGameImage(Images image) {

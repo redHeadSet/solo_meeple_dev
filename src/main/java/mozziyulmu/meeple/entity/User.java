@@ -2,6 +2,7 @@ package mozziyulmu.meeple.entity;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import mozziyulmu.meeple.entity.BaseEntity.BaseTimeData;
 import mozziyulmu.meeple.entity.Relation.BoardUser.EvaluateBoardgames;
 import mozziyulmu.meeple.entity.Relation.BoardUser.InterestBoardgames;
 import mozziyulmu.meeple.entity.Relation.BoardUser.OwnBoardgames;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"e_mail", "password", "nick_name"})
-public class User{
+public class User extends BaseTimeData {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
@@ -39,6 +40,9 @@ public class User{
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<EvaluateBoardgames> evaluateBoardgames = new ArrayList<>();
+
+    // !! 내가 작성한 Post 목록을 볼 수 있어야 함
+    // Auditing - BaseUserData 값을 User 값으로 변경 가능한지??
 
     // =================================================================================
     public User(String e_mail, String password, String nick_name) {

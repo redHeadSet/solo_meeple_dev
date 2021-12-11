@@ -27,6 +27,10 @@ public class Images extends BaseUserData {
     @OneToOne(mappedBy = "user_profile_image")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     // ====================================================================
     public Images(String path, Boardgame boardgame) {
         this.path = path;
@@ -36,5 +40,10 @@ public class Images extends BaseUserData {
     public Images(String path, User user) {
         this.path = path;
         this.user = user;
+    }
+
+    public Images(String path, Post post) {
+        this.path = path;
+        this.post = post;
     }
 }
