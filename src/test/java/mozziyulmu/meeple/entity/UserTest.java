@@ -77,68 +77,45 @@ class UserTest {
         Category ct11 = setCategory("운송", "Transportation");
         Category ct12 = setCategory("주사위", "Dice");
 
-        terraforming_mars = new Boardgame();
-        terraforming_mars.setKorName("테라포밍 마스");
-        terraforming_mars.setEngName("terraforming mars");
-        terraforming_mars.setPublishedYear(2016);
-        terraforming_mars.setMinPlayer(1);
-        terraforming_mars.setMaxPlayer(5);
-        terraforming_mars.setOptimalPlayer(3);
-        terraforming_mars.setDifficulty(DifficultyGrade.MIDDLE);
-        terraforming_mars.setPublisher(kbg);
-        terraforming_mars.setGeekId(Long.valueOf(167791));
-        terraforming_mars.setGeekLink("https://boardgamegeek.com/boardgame/167791/terraforming-mars");
-        terraforming_mars.setGeekWeight(Double.valueOf(3.24));
-        terraforming_mars.initMechanism(mech1, mech2, mech3, mech4, mech5, mech6, mech7);
-        terraforming_mars.initCategorys(ct1, ct2, ct3, ct4, ct5);
+        terraforming_mars = new Boardgame("테라포밍 마스", "terraforming mars")
+                        .setPublishedYear(2016)
+                        .setPlayers(1, 5, 3)
+                        .setPlayingTime(120, 120)
+                        .setPublisher(kbg)
+                        .setDifficulty(DifficultyGrade.MIDDLE)
+                        .setGeekData(167791, 8.247, 3.24)
+                        .initMechanism(mech1, mech2, mech3, mech4, mech5, mech6, mech7)
+                        .initCategorys(ct1, ct2, ct3, ct4, ct5);
         em.persist(terraforming_mars);
 
-        gloom_haven = new Boardgame();
-        gloom_haven.setKorName("글룸 헤이븐");
-        gloom_haven.setEngName("Gloom Haven");
-        gloom_haven.setPublishedYear(2017);
-        gloom_haven.setMinPlayer(1);
-        gloom_haven.setMaxPlayer(4);
-        gloom_haven.setOptimalPlayer(3);
-        gloom_haven.setDifficulty(DifficultyGrade.MIDDLE);
-        gloom_haven.setPublisher(kbg);
-        gloom_haven.setGeekId(Long.valueOf(174430));
-        gloom_haven.setGeekLink("https://boardgamegeek.com/boardgame/174430");
-        gloom_haven.setGeekWeight(Double.valueOf(3.87));
-        gloom_haven.initMechanism(mech4, mech6, mech7, mech8, mech9, mech10, mech11);
-        gloom_haven.initCategorys(ct6, ct7, ct8, ct9, ct10);
+        gloom_haven = new Boardgame("글룸 헤이븐", "Gloom Haven")
+                        .setPublishedYear(2017)
+                        .setPlayers(1, 4, 3)
+                        .setDifficulty(DifficultyGrade.MIDDLE)
+                        .setPublisher(kbg)
+                        .setGeekData(174430, 8.515, 3.87)
+                        .initMechanism(mech4, mech6, mech7, mech8, mech9, mech10, mech11)
+                        .initCategorys(ct6, ct7, ct8, ct9, ct10);
         em.persist(gloom_haven);
         
-        brass_birmingham = new Boardgame();
-        brass_birmingham.setKorName("브라스:버밍엄");
-        brass_birmingham.setEngName("Brass:birmingham");
-        brass_birmingham.setPublishedYear(2018);
-        brass_birmingham.setMinPlayer(2);
-        brass_birmingham.setMaxPlayer(4);
-        brass_birmingham.setOptimalPlayer(3);
-        brass_birmingham.setDifficulty(DifficultyGrade.HARD);
-        brass_birmingham.setPublisher(bm);
-        brass_birmingham.setGeekId(Long.valueOf(224517));
-        brass_birmingham.setGeekLink("https://boardgamegeek.com/boardgame/224517");
-        brass_birmingham.setGeekWeight(Double.valueOf(3.91));
-        brass_birmingham.initMechanism(mech12, mech13, mech14, mech15);
-        brass_birmingham.initCategorys(ct1, ct3, ct11);
+        brass_birmingham = new Boardgame("브라스:버밍엄", "Brass:birmingham")
+                        .setPublishedYear(2018)
+                        .setPlayers(2, 4, 3)
+                        .setDifficulty(DifficultyGrade.HARD)
+                        .setPublisher(bm)
+                        .setGeekData(224517, 8.416, 3.91)
+                        .initMechanism(mech12, mech13, mech14, mech15)
+                        .initCategorys(ct1, ct3, ct11);
         em.persist(brass_birmingham);
         
-        castles_of_burgundy = new Boardgame();
-        castles_of_burgundy.setKorName("버건디의 성");
-        castles_of_burgundy.setEngName("The castles of burgundy");
-        castles_of_burgundy.setPublishedYear(2011);
-        castles_of_burgundy.setMinPlayer(2);
-        castles_of_burgundy.setMaxPlayer(4);
-        castles_of_burgundy.setOptimalPlayer(2);
-        castles_of_burgundy.setDifficulty(DifficultyGrade.EASY);
-        castles_of_burgundy.setPublisher(rbg);
-        castles_of_burgundy.setGeekId(Long.valueOf(84876));
-        castles_of_burgundy.setGeekLink("https://boardgamegeek.com/boardgame/84876");
-        castles_of_burgundy.setGeekWeight(Double.valueOf(3.00));
-        castles_of_burgundy.initMechanism(mech3, mech4, mech5, mech6, mech16);
-        castles_of_burgundy.initCategorys(ct12);
+        castles_of_burgundy = new Boardgame("버건디의 성", "The castles of burgundy")
+                        .setPublishedYear(2011)
+                        .setPlayers(2, 4, 2)
+                        .setDifficulty(DifficultyGrade.EASY)
+                        .setPublisher(rbg)
+                        .setGeekData(84876, 8.007, 3.00)
+                        .initMechanism(mech3, mech4, mech5, mech6, mech16)
+                        .initCategorys(ct12);
         em.persist(castles_of_burgundy);
 
         User user = new User("stikfas7@naver.com", "1234", "한재");
@@ -152,10 +129,10 @@ class UserTest {
     @Test
     public void 보드게임_유저_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKorName("테포마"); em.persist(bg1);
-        Boardgame bg2 = new Boardgame(); bg2.setKorName("니다벨리르");  em.persist(bg2);
-        Boardgame bg3 = new Boardgame(); bg3.setKorName("팬거시");    em.persist(bg3);
-        Boardgame bg4 = new Boardgame(); bg4.setKorName("아딱"); em.persist(bg4);
+        Boardgame bg1 = new Boardgame("테포마", ""); em.persist(bg1);
+        Boardgame bg2 = new Boardgame("니다벨리르", ""); em.persist(bg2);
+        Boardgame bg3 = new Boardgame("팬거시", ""); em.persist(bg3);
+        Boardgame bg4 = new Boardgame("아딱", ""); em.persist(bg4);
 
         User user = new User("stikfas7@naver.com", "1234", "한재");
         user.addOwnBoardgame(bg1);
@@ -185,8 +162,8 @@ class UserTest {
     @Test
     public void 보드게임_메커니즘_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKorName("테포마"); em.persist(bg1);
-        Boardgame bg2 = new Boardgame(); bg2.setKorName("팬거시");  em.persist(bg2);
+        Boardgame bg1 = new Boardgame("테포마", ""); em.persist(bg1);
+        Boardgame bg2 = new Boardgame("팬거시", ""); em.persist(bg2);
 
         Mechanism mech1 = new Mechanism("엔진", "engine"); em.persist(mech1);
         Mechanism mech2 = new Mechanism("셋콜렉션", "set collection"); em.persist(mech2);
@@ -229,8 +206,8 @@ class UserTest {
     @Test
     public void 보드게임_카테고리_test() {
         // given
-        Boardgame bg1 = new Boardgame(); bg1.setKorName("테포마"); em.persist(bg1);
-        Boardgame bg2 = new Boardgame(); bg2.setKorName("아딱"); em.persist(bg2);
+        Boardgame bg1 = new Boardgame("테포마", ""); em.persist(bg1);
+        Boardgame bg2 = new Boardgame("아딱", ""); em.persist(bg2);
 
         Category ct1 = new Category("우주", "space"); em.persist(ct1);
         Category ct2 = new Category("괴물", "monster"); em.persist(ct2);
@@ -274,8 +251,7 @@ class UserTest {
         em.persist(user);
         Long userId = user.getId();
 
-        Boardgame bg = new Boardgame();
-        bg.setKorName("테포마");
+        Boardgame bg = new Boardgame("테포마", "");
         bg.addGameImage(new Images("C:\\terraforming_mars1.jpg", bg));
         bg.addGameImage(new Images("C:\\add\\terraforming_mars2.jpg", bg));
         bg.addGameImage(new Images("C:\\remove\\terraforming_mars3.jpg", bg));
@@ -308,16 +284,13 @@ class UserTest {
         em.persist(publisher);
         Long pub_id = publisher.getId();
 
-        Boardgame bg1 = new Boardgame();
-        bg1.setKorName("테포마");
+        Boardgame bg1 = new Boardgame("테포마", "");
         bg1.setPublisher(publisher);
         em.persist(bg1);
-        Boardgame bg2 = new Boardgame();
-        bg2.setKorName("아딱");
+        Boardgame bg2 = new Boardgame("아딱", "");
         bg2.setPublisher(publisher);
         em.persist(bg2);
-        Boardgame bg3 = new Boardgame();
-        bg3.setKorName("돌팔이약장수");
+        Boardgame bg3 = new Boardgame("돌팔이약장수", "");
         bg3.setPublisher(publisher);
         em.persist(bg3);
 
