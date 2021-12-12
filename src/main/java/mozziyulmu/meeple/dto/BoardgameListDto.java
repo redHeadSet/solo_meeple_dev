@@ -38,4 +38,10 @@ public class BoardgameListDto {
     public void setViewCategory(List<String> viewCategory) {
         this.viewCategory = viewCategory;
     }
+
+    @Override
+    public String toString() {
+        return korName + "[" + minPlayer + "~" + maxPlayer + "][RT:" + geekRating.doubleValue()
+                + "] - " + viewCategory.toString() + ":" + lineComment;
+    }
 }
