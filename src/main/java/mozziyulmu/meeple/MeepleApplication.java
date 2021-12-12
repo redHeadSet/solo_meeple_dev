@@ -1,13 +1,11 @@
 package mozziyulmu.meeple;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import javax.persistence.EntityManager;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -26,10 +24,5 @@ public class MeepleApplication {
 				return Optional.of("tester");
 			}
 		};
-	}
-
-	@Bean
-	JPAQueryFactory jpaQueryFactory(EntityManager entityManager) {
-		return new JPAQueryFactory(entityManager);
 	}
 }
