@@ -15,13 +15,15 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
-class UserTest {
+class EntityTest {
     @Autowired
     public EntityManager em;
     Boardgame terraforming_mars;
     Boardgame gloom_haven;
     Boardgame brass_birmingham;
     Boardgame castles_of_burgundy;
+    Boardgame seven_wonders_dual;
+    Boardgame dominion;
 
     public Publisher setPublisher(String kor_name, String eng_name) {
         Publisher publisher = new Publisher(kor_name, eng_name);
@@ -63,6 +65,7 @@ class UserTest {
         Mechanism mech14 = setMechanism("시장", "Market");
         Mechanism mech15 = setMechanism("네트워크 경로 구성", "Network building");
         Mechanism mech16 = setMechanism("주사위 굴림", "Dice Rolling");
+        Mechanism mech17 = setMechanism("카드 드래프팅", "Card drafting");
 
         Category ct1 = setCategory("경제", "Economic");
         Category ct2 = setCategory("환경", "Environment");
@@ -76,6 +79,10 @@ class UserTest {
         Category ct10 = setCategory("미니어처", "Miniature");
         Category ct11 = setCategory("운송", "Transportation");
         Category ct12 = setCategory("주사위", "Dice");
+        Category ct13 = setCategory("고대", "Ancient");
+        Category ct14 = setCategory("카드 게임", "Card game");
+        Category ct15 = setCategory("문명", "Civilzation");
+        Category ct16 = setCategory("중세", "Medieval");
 
         terraforming_mars = new Boardgame("테라포밍 마스", "terraforming mars")
                         .setPublishedYear(2016)
@@ -115,8 +122,28 @@ class UserTest {
                         .setPublisher(rbg)
                         .setGeekData(84876, 8.007, 3.00)
                         .initMechanism(mech3, mech4, mech5, mech6, mech16)
-                        .initCategorys(ct12);
+                        .initCategorys(ct12, ct13);
         em.persist(castles_of_burgundy);
+
+        seven_wonders_dual = new Boardgame("세븐원더스 듀얼", "7 Wonders dual")
+                .setPublishedYear(2015)
+                .setPlayers(2, 2, 2)
+                .setDifficulty(DifficultyGrade.EASY)
+                .setPublisher(kbg)
+                .setGeekData(173346, 8.108, 2.23)
+                .initMechanism(mech17, mech2)
+                .initCategorys(ct1, ct13, ct14, ct15);
+        em.persist(seven_wonders_dual);
+
+        dominion = new Boardgame("도미니언", "Dominion")
+                .setPublishedYear(2008)
+                .setPlayers(2, 4, 3)
+                .setDifficulty(DifficultyGrade.EASY)
+                .setPublisher(kbg)
+                .setGeekData(36218, 7.611, 2.35)
+                .initMechanism(mech1, mech11, mech5)
+                .initCategorys(ct16, ct14);
+        em.persist(dominion);
 
         User user = new User("stikfas7@naver.com", "1234", "한재");
         user.addOwnBoardgame(terraforming_mars);
@@ -124,6 +151,18 @@ class UserTest {
         user.addInterestBoardgame(castles_of_burgundy);
         user.addEvaluateBoardgame(brass_birmingham);
         em.persist(user);
+
+        Recommand rec_3_party = new Recommand("3인 추천 게임")
+                .setDesc("3인 추천 게임 리스트입니다.")
+                .setImage("3인 대표 이미지")
+                .initBoardgames(terraforming_mars, dominion);
+        em.persist(rec_3_party);
+
+        Recommand rec_2_party = new Recommand("2인 추천 게임")
+                .setDesc("2인에서 하면 꿀잼")
+                .setImage("2인 대표 이미지")
+                .initBoardgames(castles_of_burgundy, seven_wonders_dual);
+        em.persist(rec_2_party);
     }
 
     @Test

@@ -23,7 +23,7 @@ public class Mechanism extends BaseUserData {
     private String korName;
     @Column(name = "mechanism_eng_name")
     private String engName;
-
+    @Column(name = "mechanism_description")
     private String description;
 
     @OneToMany(mappedBy = "mechanism")

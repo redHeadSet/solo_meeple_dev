@@ -21,6 +21,7 @@ public class Post extends BaseUserData {
     private Long id;
 
     @NotNull
+    @Column(name = "post_title")
     private String title;
     private String comment;
 

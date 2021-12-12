@@ -31,6 +31,9 @@ public class Images extends BaseUserData {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @OneToOne(mappedBy = "repImages")
+    private Recommand recommand;
+
     // ====================================================================
     public Images(String path, Boardgame boardgame) {
         this.path = path;
@@ -45,5 +48,10 @@ public class Images extends BaseUserData {
     public Images(String path, Post post) {
         this.path = path;
         this.post = post;
+    }
+
+    public Images(String path, Recommand recommand) {
+        this.path = path;
+        this.recommand = recommand;
     }
 }
