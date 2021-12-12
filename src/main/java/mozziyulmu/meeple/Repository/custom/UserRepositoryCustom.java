@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface UserRepositoryCustom {
     public List<User> findAllUsers();
-    public void clear();
 }

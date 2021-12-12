@@ -19,12 +19,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public void clear() {
-        entityManager.flush();
-        entityManager.clear();
-    }
-
-    @Override
     public List<User> findAllUsers() {
         return jpaQueryFactory
                 .selectFrom(user)
