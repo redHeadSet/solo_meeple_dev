@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -213,10 +215,11 @@ class RepositoryTest {
         // given
 
         // when
-        List<BoardgameListDto> boardgameSimpleList = boardgameRepository.getBoardgameSimpleList();
+        PageRequest pr = PageRequest.of(0, 20);
+        Page<BoardgameListDto> boardgameSimpleList = boardgameRepository.getBoardgameSimpleList(pr);
 
         // then
-        Assertions.assertThat(boardgameSimpleList.size()).isEqualTo(6);
+        Assertions.assertThat(boardgameSimpleList.getTotalElements()).isEqualTo(6);
         for (BoardgameListDto each : boardgameSimpleList) {
             System.out.println(each.toString());
         }
@@ -269,9 +272,11 @@ class RepositoryTest {
         if(allCategoryKorName.size() <= 0)
             fail("카테고리 없음");
 
+        PageRequest pr = PageRequest.of(0, 20);
+
         for (String each : allCategoryKorName) {
             System.out.print("카테고리 [" + each + "] 내 게임들 : ");
-            for(BoardgameListDto bgInCt : boardgameRepository.getBoardgameInCategory(each)){
+            for(BoardgameListDto bgInCt : boardgameRepository.getBoardgameInCategory(each, pr)){
                 System.out.print(bgInCt.getKorName() + ", ");
             }
             System.out.println();

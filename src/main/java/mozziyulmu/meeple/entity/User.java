@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"e_mail", "password", "nick_name"})
+@ToString(of = {"eMail", "password", "nickName"})
 public class User extends BaseTimeData {
     @Id
     @GeneratedValue

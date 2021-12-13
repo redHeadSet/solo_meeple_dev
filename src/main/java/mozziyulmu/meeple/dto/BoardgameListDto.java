@@ -1,9 +1,13 @@
 package mozziyulmu.meeple.dto;
 
 import lombok.Getter;
+import lombok.ToString;
 import mozziyulmu.meeple.entity.Boardgame;
 
 @Getter
+@ToString(of = {
+        "korName", "minPlayer", "maxPlayer", "geekRating", "viewCategory", "lineComment"
+})
 public class BoardgameListDto {
     private Long id;
     private String korName;
@@ -27,11 +31,5 @@ public class BoardgameListDto {
         lineComment = boardgame.getLineComment();
 
         viewCategory = boardgame.getPrtRepKorCategory();
-    }
-
-    @Override
-    public String toString() {
-        return korName + "[" + minPlayer + "~" + maxPlayer + "][RT:" + geekRating.doubleValue()
-                + "] - " + viewCategory + ":" + lineComment;
     }
 }

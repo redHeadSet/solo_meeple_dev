@@ -1,11 +1,11 @@
 package mozziyulmu.meeple.Repository.custom;
 
 import mozziyulmu.meeple.dto.BoardgameListDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BoardgameReposirotyCustom {
-    public List<BoardgameListDto> getBoardgameSimpleList();
+    public Page<BoardgameListDto> getBoardgameSimpleList(Pageable pageable);
 
-    public List<BoardgameListDto> getBoardgameInCategory(String categoryKorName);
+    public Page<BoardgameListDto> getBoardgameInCategory(String categoryKorName, Pageable pageable);
 }

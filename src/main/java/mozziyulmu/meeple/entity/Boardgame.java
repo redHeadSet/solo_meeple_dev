@@ -14,7 +14,14 @@ import org.springframework.util.StringUtils;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"name_kor", "name_eng"})
+@ToString(of = {
+        "korName", "engName",
+        "lineComment", "publishedYear",
+        "minPlayer", "maxPlayer", "optimalPlayer",
+        "minPlayingMinute", "maxPlayingMinute", "age",
+        "geekId", "geekRating", "geekLink", "geekWeight",
+        "prtRepKorMechnism", "prtRepKorCategory", "repImagePath"
+})
 public class Boardgame extends BaseUserData {
     final static int MINIMUM_PLAYER  = 1;
     final static int INFINITE_PLAYER = 999;
