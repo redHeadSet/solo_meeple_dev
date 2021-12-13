@@ -10,6 +10,7 @@ import java.util.List;
 
 @Getter
 public class BoardgameListDto {
+    private Long id;
     private String korName;
     private String image;   // 이미지를 어떻게 전달해주지?
     private int minPlayer;
@@ -20,6 +21,7 @@ public class BoardgameListDto {
 
     // ================================================
     public BoardgameListDto(Boardgame boardgame) {
+        id = boardgame.getId();
         korName = boardgame.getKorName();
         List<Images> images = boardgame.getImages();
         if(images.size() > 0)

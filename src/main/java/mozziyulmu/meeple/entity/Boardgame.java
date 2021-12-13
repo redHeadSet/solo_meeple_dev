@@ -140,6 +140,7 @@ public class Boardgame extends BaseUserData {
     public void addGameImage(Images image) {
         images.add(image);
     }
+    public void addGameImage(String path) { images.add(new Images(path, this)); }
 
     public void addMechanism(Mechanism mechanism){
         mechanisms.add(new BoardMechaRT(this, mechanism));

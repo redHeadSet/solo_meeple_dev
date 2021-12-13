@@ -17,11 +17,4 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         this.entityManager = entityManager;
         jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
-
-    @Override
-    public List<User> findAllUsers() {
-        return jpaQueryFactory
-                .selectFrom(user)
-                .fetch();
-    }
 }

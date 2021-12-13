@@ -95,6 +95,9 @@ class RepositoryTest {
                 .setGeekData(167791, 8.247, 3.24)
                 .initMechanism(mech1, mech2, mech3, mech4, mech5, mech6, mech7)
                 .initCategorys(ct1, ct2, ct3, ct4, ct5);
+        terraforming_mars.addGameImage("테포마 이미지 1.jpg");
+        terraforming_mars.addGameImage("테포마 이미지 2.jpg");
+        terraforming_mars.addGameImage("테포마 이미지 3.jpg");
         em.persist(terraforming_mars);
 
         Boardgame gloom_haven = new Boardgame("글룸 헤이븐", "Gloom Haven")
@@ -106,6 +109,9 @@ class RepositoryTest {
                 .setGeekData(174430, 8.515, 3.87)
                 .initMechanism(mech4, mech6, mech7, mech8, mech9, mech10, mech11)
                 .initCategorys(ct6, ct7, ct8, ct9, ct10);
+        gloom_haven.addGameImage("글룸 이미지 1.jpg");
+        gloom_haven.addGameImage("글룸 이미지 2.jpg");
+        gloom_haven.addGameImage("글룸 이미지 3.jpg");
         em.persist(gloom_haven);
 
         Boardgame brass_birmingham = new Boardgame("브라스:버밍엄", "Brass:birmingham")
@@ -117,6 +123,9 @@ class RepositoryTest {
                 .setGeekData(224517, 8.416, 3.91)
                 .initMechanism(mech12, mech13, mech14, mech15)
                 .initCategorys(ct1, ct3, ct11);
+        brass_birmingham.addGameImage("버밍엄 이미지 1.jpg");
+        brass_birmingham.addGameImage("버밍엄 이미지 2.jpg");
+        brass_birmingham.addGameImage("버밍엄 이미지 3.jpg");
         em.persist(brass_birmingham);
 
         Boardgame castles_of_burgundy = new Boardgame("버건디의 성", "The castles of burgundy")
@@ -128,6 +137,9 @@ class RepositoryTest {
                 .setGeekData(84876, 8.007, 3.00)
                 .initMechanism(mech3, mech4, mech5, mech6, mech16)
                 .initCategorys(ct12, ct13);
+        castles_of_burgundy.addGameImage("버건디 이미지 1.jpg");
+        castles_of_burgundy.addGameImage("버건디 이미지 2.jpg");
+        castles_of_burgundy.addGameImage("버건디 이미지 3.jpg");
         em.persist(castles_of_burgundy);
 
         Boardgame seven_wonders_dual = new Boardgame("세븐원더스 듀얼", "7 Wonders dual")
@@ -139,6 +151,9 @@ class RepositoryTest {
                 .setGeekData(173346, 8.108, 2.23)
                 .initMechanism(mech17, mech2)
                 .initCategorys(ct1, ct13, ct14, ct15);
+        seven_wonders_dual.addGameImage("세듀얼 이미지 1.jpg");
+        seven_wonders_dual.addGameImage("세듀얼 이미지 2.jpg");
+        seven_wonders_dual.addGameImage("세듀얼 이미지 3.jpg");
         em.persist(seven_wonders_dual);
 
         Boardgame dominion = new Boardgame("도미니언", "Dominion")
@@ -150,6 +165,9 @@ class RepositoryTest {
                 .setGeekData(36218, 7.611, 2.35)
                 .initMechanism(mech1, mech11, mech5)
                 .initCategorys(ct16, ct14);
+        dominion.addGameImage("도미니언 이미지 1.jpg");
+        dominion.addGameImage("도미니언 이미지 2.jpg");
+        dominion.addGameImage("도미니언 이미지 3.jpg");
         em.persist(dominion);
 
         User user = new User("stikfas7@naver.com", "1234", "한재");
@@ -170,6 +188,7 @@ class RepositoryTest {
                 .setImage("2인 대표 이미지")
                 .initBoardgames(castles_of_burgundy, seven_wonders_dual);
         em.persist(rec_2_party);
+        em.flush(); em.clear();
     }
 
     @Test
@@ -180,7 +199,8 @@ class RepositoryTest {
 
         em.flush(); em.clear();
 
-        List<User> allUsers = userRepository.findAllUsers();
+        List<User> allUsers = userRepository.findAll();
+        Assertions.assertThat(allUsers.size()).isEqualTo(4);
         for (User each :
                 allUsers) {
             System.out.println("닉네임 : " + each.getNickName());
@@ -202,13 +222,33 @@ class RepositoryTest {
     }
 
     @Test
+    public void 보드게임_이미지_순서_확인() {
+        // given
+
+        // when
+        List<Boardgame> all = boardgameRepository.findAll();
+
+        // then
+        for (Boardgame each : all) {
+            System.out.println(each.getKorName() + " : [");
+            for(Images image : each.getImages()){
+                System.out.println(image.getPath() + ", ");
+            }
+            System.out.println("]");
+        }
+
+    }
+
+    @Test
     public void 추천리스트_테스트() {
         // given
         em.flush(); em.clear();
 
         // when
         Optional<Recommand> opt_find = recommandRepository.findByTitle("3인 추천 게임");
-        Recommand find = opt_find.orElse(fail());
+        if (!opt_find.isPresent())
+            fail();
+        Recommand find = opt_find.get();
 
         // then
         System.out.print(find.getTitle() + ": ");
