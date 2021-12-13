@@ -28,6 +28,7 @@ class RepositoryTest {
     @Autowired private BoardgameRepository boardgameRepository;
     @Autowired private RecommandRepository recommandRepository;
     @Autowired private CategoryRepository categoryRepository;
+    @Autowired private MechanismRepository mechanismRepository;
 
     public Publisher setPublisher(String kor_name, String eng_name) {
         Publisher publisher = new Publisher(kor_name, eng_name);
@@ -215,6 +216,7 @@ class RepositoryTest {
         // given
 
         // when
+        List<Boardgame> findOne = boardgameRepository.findByKorName("테라포밍 마스");
         PageRequest pr = PageRequest.of(0, 20);
         Page<BoardgameListDto> boardgameSimpleList = boardgameRepository.getBoardgameSimpleList(pr);
 
@@ -281,5 +283,23 @@ class RepositoryTest {
             }
             System.out.println();
         }
+    }
+
+    @Test
+    public void 매커니즘_테스트() {
+        // given
+
+        // when
+        List<String> allMechanismKorName = mechanismRepository.findAllMechanismKorName();
+        System.out.println(allMechanismKorName.toString());
+
+        PageRequest pr = PageRequest.of(0, 20);
+        Page<BoardgameListDto> result = boardgameRepository.getBoardgameInMechanism("엔진", pr);
+
+        for (BoardgameListDto each : result) {
+            System.out.println(each);
+        }
+        // then
+
     }
 }

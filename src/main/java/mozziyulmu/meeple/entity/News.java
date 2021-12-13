@@ -3,28 +3,32 @@ package mozziyulmu.meeple.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import mozziyulmu.meeple.entity.BaseEntity.BaseTimeData;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class News {
+public class News extends BaseTimeData {
     @Id
     @GeneratedValue
     @Column(name = "news_id")
     private Long id;
 
-    private String Title;
+    private String title;
     private String text;
     private String url;
+
+    private LocalDateTime writeTime;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Images companyImage;
 
     public News(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public News setText(String text){
@@ -39,6 +43,11 @@ public class News {
 
     public News setCompanyImage(String imagePath) {
         companyImage = new Images(imagePath, this);
+        return this;
+    }
+
+    public News setWriteTime(LocalDateTime writeTime) {
+        this.writeTime = writeTime;
         return this;
     }
 }

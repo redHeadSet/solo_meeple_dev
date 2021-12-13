@@ -9,5 +9,8 @@ import java.util.Optional;
 
 public interface BoardgameRepository extends JpaRepository<Boardgame, Long>, BoardgameReposirotyCustom {
     Optional<Boardgame> findById(Long id);
+
     List<Boardgame> findAll();
+
+    List<Boardgame> findByKorName(String korName);
 }

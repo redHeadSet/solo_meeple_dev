@@ -8,4 +8,6 @@ public interface BoardgameReposirotyCustom {
     public Page<BoardgameListDto> getBoardgameSimpleList(Pageable pageable);
 
     public Page<BoardgameListDto> getBoardgameInCategory(String categoryKorName, Pageable pageable);
+
+    public Page<BoardgameListDto> getBoardgameInMechanism(String mechanismKorName, Pageable pageable);
 }

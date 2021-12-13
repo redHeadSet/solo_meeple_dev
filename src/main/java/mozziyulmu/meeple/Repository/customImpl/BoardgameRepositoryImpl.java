@@ -10,6 +10,7 @@ import mozziyulmu.meeple.entity.QBoardgame;
 import mozziyulmu.meeple.entity.QCategory;
 import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardCategory.QBoardCateRT;
+import mozziyulmu.meeple.entity.Relation.BoardMechanism.QBoardMechaRT;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 import static mozziyulmu.meeple.entity.QBoardgame.boardgame;
 import static mozziyulmu.meeple.entity.QCategory.category;
 import static mozziyulmu.meeple.entity.Relation.BoardCategory.QBoardCateRT.boardCateRT;
+import static mozziyulmu.meeple.entity.Relation.BoardMechanism.QBoardMechaRT.boardMechaRT;
 
 public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
     private final EntityManager entityManager;
@@ -66,5 +68,18 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
 
         return new PageImpl<>(contents, pageable, contents.size());
 //        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<BoardgameListDto> getBoardgameInMechanism(String mechanismKorName, Pageable pageable) {
+        List<BoardgameListDto> contents = jpaQueryFactory
+                .select(Projections.constructor(BoardgameListDto.class, boardMechaRT.boardgame))
+                .from(boardMechaRT)
+                .where(boardMechaRT.mechanism.korName.eq(mechanismKorName))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(contents, pageable, contents.size());
     }
 }
