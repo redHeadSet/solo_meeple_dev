@@ -34,6 +34,9 @@ public class Images extends BaseUserData {
     @OneToOne(mappedBy = "repImages")
     private Recommand recommand;
 
+    @OneToOne(mappedBy = "companyImage")
+    private News news;
+
     // ====================================================================
     public Images(String path, Boardgame boardgame) {
         this.path = path;
@@ -53,5 +56,10 @@ public class Images extends BaseUserData {
     public Images(String path, Recommand recommand) {
         this.path = path;
         this.recommand = recommand;
+    }
+
+    public Images(String path, News news) {
+        this.path = path;
+        this.news = news;
     }
 }
