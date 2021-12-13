@@ -1,11 +1,13 @@
 package mozziyulmu.meeple.Repository.customImpl;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import mozziyulmu.meeple.Repository.custom.BoardgameReposirotyCustom;
 import mozziyulmu.meeple.dto.BoardgameListDto;
 import mozziyulmu.meeple.entity.Boardgame;
 import mozziyulmu.meeple.entity.QBoardgame;
 import mozziyulmu.meeple.entity.QCategory;
+import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardCategory.QBoardCateRT;
 
 import javax.persistence.EntityManager;
@@ -26,25 +28,21 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
     }
 
     @Override
-    // 1+N 쿼리 호출됨 : 개선이 되려나?
+    // 1+N 쿼리 호출됨 : 개선이 되려나? - 출력용 String으로 처리해봄
     public List<BoardgameListDto> getBoardgameSimpleList() {
-        List<Boardgame> boardgameList = jpaQueryFactory
-                .select(boardgame)
+        // 생성자 Projection 처리
+        return jpaQueryFactory
+                .select(Projections.constructor(BoardgameListDto.class,boardgame))
                 .from(boardgame)
                 .fetch();
+    }
 
-        return boardgameList.stream().map(
-                boardgame -> {
-                    BoardgameListDto eachData = new BoardgameListDto(boardgame);
-
-                    eachData.setViewCategory(jpaQueryFactory.select(category.korName)
-                                                            .from(category)
-                                                            .join(category.boardgames, boardCateRT)
-                                                            .where(boardCateRT.boardgame.eq(boardgame))
-                                                            .fetch());
-
-                    return eachData;
-                }
-        ).collect(Collectors.toList());
+    @Override
+    public List<BoardgameListDto> getBoardgameInCategory(String categoryKorName) {
+        return jpaQueryFactory
+                .select(Projections.constructor(BoardgameListDto.class, boardCateRT.boardgame))
+                .from(boardCateRT)
+                .where(boardCateRT.category.korName.eq(categoryKorName))
+                .fetch();
     }
 }

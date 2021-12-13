@@ -9,6 +9,7 @@ import mozziyulmu.meeple.entity.Relation.BoardPost.BoardPostRT;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.util.StringUtils;
 
 @Entity
 @Getter
@@ -54,16 +55,23 @@ public class Boardgame extends BaseUserData {
     private Double geekWeight; // 긱 웨이트
 
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
-    List<BoardMechaRT> mechanisms = new ArrayList<>();
+    private List<BoardMechaRT> mechanisms = new ArrayList<>();
+    // 출력용 간단 문구
+    private String prtRepKorMechnism;
 
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
-    List<BoardCateRT> categorys = new ArrayList<>();
+    private List<BoardCateRT> categorys = new ArrayList<>();
+    // 출력용 간단 문구
+    private String prtRepKorCategory;
 
     @OneToMany(mappedBy = "boardgame", cascade = CascadeType.ALL)
-    List<Images> images = new ArrayList<>();
+    private List<Images> images = new ArrayList<>();
+    // 대표 이미지
+    private String repImagePath;
 
     @OneToMany(mappedBy = "boardgame")
-    List<BoardPostRT> relatePosts = new ArrayList<>();
+    private List<BoardPostRT> relatePosts = new ArrayList<>();
+
 
     // ========================================================================
     // Constructor & Builder
@@ -122,25 +130,38 @@ public class Boardgame extends BaseUserData {
 
     public Boardgame initMechanism(Mechanism... inputMachanisms){
         mechanisms.clear();
+        prtRepKorMechnism = "";
+        int count = 3;
         for (Mechanism eachMechanism : inputMachanisms){
             addMechanism(eachMechanism);
+            if(count > 0){
+                prtRepKorMechnism += ("#" + eachMechanism.getKorName() + " ");
+                count--;
+            }
         }
         return this;
     }
 
     public Boardgame initCategorys(Category... inputCategorys){
         categorys.clear();
+        prtRepKorCategory = "";
+        int count = 3;
         for (Category eachCategory : inputCategorys){
             addCategory(eachCategory);
+            if(count > 0){
+                prtRepKorCategory += ("#" + eachCategory.getKorName() + " ");
+                count--;
+            }
         }
         return this;
     }
 
     // ========================================================================
-    public void addGameImage(Images image) {
-        images.add(image);
+    public void addGameImage(String path) {
+        images.add(new Images(path, this));
+        if(!StringUtils.hasText(repImagePath))
+            repImagePath = path;
     }
-    public void addGameImage(String path) { images.add(new Images(path, this)); }
 
     public void addMechanism(Mechanism mechanism){
         mechanisms.add(new BoardMechaRT(this, mechanism));

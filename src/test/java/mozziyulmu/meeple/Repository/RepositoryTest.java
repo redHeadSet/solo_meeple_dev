@@ -25,6 +25,7 @@ class RepositoryTest {
     @Autowired private UserRepository userRepository;
     @Autowired private BoardgameRepository boardgameRepository;
     @Autowired private RecommandRepository recommandRepository;
+    @Autowired private CategoryRepository categoryRepository;
 
     public Publisher setPublisher(String kor_name, String eng_name) {
         Publisher publisher = new Publisher(kor_name, eng_name);
@@ -254,6 +255,26 @@ class RepositoryTest {
         System.out.print(find.getTitle() + ": ");
         for(BoardRecomRT rtData :find.getBoardgames()){
             System.out.print(rtData.getBoardgame().getKorName() + ", ");
+        }
+    }
+
+    @Test
+    public void 카테고리_테스트() {
+        // given
+
+        // when
+        List<String> allCategoryKorName = categoryRepository.findAllCategoryKorName();
+
+        // then
+        if(allCategoryKorName.size() <= 0)
+            fail("카테고리 없음");
+
+        for (String each : allCategoryKorName) {
+            System.out.print("카테고리 [" + each + "] 내 게임들 : ");
+            for(BoardgameListDto bgInCt : boardgameRepository.getBoardgameInCategory(each)){
+                System.out.print(bgInCt.getKorName() + ", ");
+            }
+            System.out.println();
         }
     }
 }

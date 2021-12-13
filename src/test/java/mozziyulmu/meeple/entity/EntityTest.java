@@ -291,9 +291,9 @@ class EntityTest {
         Long userId = user.getId();
 
         Boardgame bg = new Boardgame("테포마", "");
-        bg.addGameImage(new Images("C:\\terraforming_mars1.jpg", bg));
-        bg.addGameImage(new Images("C:\\add\\terraforming_mars2.jpg", bg));
-        bg.addGameImage(new Images("C:\\remove\\terraforming_mars3.jpg", bg));
+        bg.addGameImage("C:\\terraforming_mars1.jpg");
+        bg.addGameImage("C:\\add\\terraforming_mars2.jpg");
+        bg.addGameImage("C:\\remove\\terraforming_mars3.jpg");
         em.persist(bg);
         Long bgid = bg.getId();
 

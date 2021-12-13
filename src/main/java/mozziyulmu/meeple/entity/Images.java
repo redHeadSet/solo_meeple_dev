@@ -27,7 +27,7 @@ public class Images extends BaseUserData {
     @OneToOne(mappedBy = "userProfileImage")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
