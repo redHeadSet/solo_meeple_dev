@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import mozziyulmu.meeple.dto.BoardgameListDto;
 import mozziyulmu.meeple.entity.*;
 import mozziyulmu.meeple.entity.Relation.BoardRecom.BoardRecomRT;
+import mozziyulmu.meeple.searchFilter.BoardgameFilter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ class RepositoryTest {
     @Autowired private RecommandRepository recommandRepository;
     @Autowired private CategoryRepository categoryRepository;
     @Autowired private MechanismRepository mechanismRepository;
+    @Autowired private SearchRepository searchRepository;
 
     public Publisher setPublisher(String kor_name, String eng_name) {
         Publisher publisher = new Publisher(kor_name, eng_name);
@@ -301,5 +303,23 @@ class RepositoryTest {
         }
         // then
 
+    }
+
+    @Test
+    public void 검색_테스트() {
+        // given
+        BoardgameFilter boardgameFilter = new BoardgameFilter();
+        boardgameFilter.addCategoryName("경제", "산업");
+        boardgameFilter.addMechanismsName("엔진", "경쟁");
+        boardgameFilter.setInnerName("마스");
+
+        // when
+        PageRequest pr = PageRequest.of(0, 20);
+        Page<BoardgameListDto> boardgameListDtos = searchRepository.searchBoardgame(boardgameFilter, pr);
+
+        // then
+        for (BoardgameListDto each : boardgameListDtos) {
+            System.out.println(each.toString());
+        }
     }
 }
