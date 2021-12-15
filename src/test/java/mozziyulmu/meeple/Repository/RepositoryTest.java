@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import mozziyulmu.meeple.dto.BoardgameListDto;
 import mozziyulmu.meeple.entity.*;
 import mozziyulmu.meeple.entity.Relation.BoardRecom.BoardRecomRT;
-import mozziyulmu.meeple.searchFilter.BoardgameFilter;
+import mozziyulmu.meeple.support.BoardgameFilter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -73,6 +72,7 @@ class RepositoryTest {
         Mechanism mech15 = setMechanism("네트워크 경로 구성", "Network building");
         Mechanism mech16 = setMechanism("주사위 굴림", "Dice Rolling");
         Mechanism mech17 = setMechanism("카드 드래프팅", "Card drafting");
+        Mechanism mech18 = setMechanism("핸드 관리", "Hand Management");
 
         Category ct1 = setCategory("경제", "Economic");
         Category ct2 = setCategory("환경", "Environment");
@@ -96,7 +96,6 @@ class RepositoryTest {
                 .setPlayers(1, 5, 3)
                 .setPlayingTime(120, 120)
                 .setPublisher(kbg)
-                .setDifficulty(DifficultyGrade.MIDDLE)
                 .setLineComment("화성을 지구화 시켜보자")
                 .setGeekData(167791, 8.247, 3.24)
                 .initMechanism(mech1, mech2, mech3, mech4, mech5, mech6, mech7)
@@ -109,7 +108,6 @@ class RepositoryTest {
         Boardgame gloom_haven = new Boardgame("글룸 헤이븐", "Gloom Haven")
                 .setPublishedYear(2017)
                 .setPlayers(1, 4, 3)
-                .setDifficulty(DifficultyGrade.MIDDLE)
                 .setLineComment("던전을 탐험하며 강해지는 우리")
                 .setPublisher(kbg)
                 .setGeekData(174430, 8.515, 3.87)
@@ -123,7 +121,6 @@ class RepositoryTest {
         Boardgame brass_birmingham = new Boardgame("브라스:버밍엄", "Brass:birmingham")
                 .setPublishedYear(2018)
                 .setPlayers(2, 4, 3)
-                .setDifficulty(DifficultyGrade.HARD)
                 .setLineComment("운하와 철도를 통해 성공한 사업가가 된다")
                 .setPublisher(bm)
                 .setGeekData(224517, 8.416, 3.91)
@@ -137,7 +134,6 @@ class RepositoryTest {
         Boardgame castles_of_burgundy = new Boardgame("버건디의 성", "The castles of burgundy")
                 .setPublishedYear(2011)
                 .setPlayers(2, 4, 2)
-                .setDifficulty(DifficultyGrade.EASY)
                 .setLineComment("중세 시대의 영주로서 내 영지를 부강하게 해보자")
                 .setPublisher(rbg)
                 .setGeekData(84876, 8.007, 3.00)
@@ -151,7 +147,6 @@ class RepositoryTest {
         Boardgame seven_wonders_dual = new Boardgame("세븐원더스 듀얼", "7 Wonders dual")
                 .setPublishedYear(2015)
                 .setPlayers(2, 2, 2)
-                .setDifficulty(DifficultyGrade.EASY)
                 .setLineComment("내 문명이 너보다 셀 것이다")
                 .setPublisher(kbg)
                 .setGeekData(173346, 8.108, 2.23)
@@ -165,7 +160,6 @@ class RepositoryTest {
         Boardgame dominion = new Boardgame("도미니언", "Dominion")
                 .setPublishedYear(2008)
                 .setPlayers(2, 4, 3)
-                .setDifficulty(DifficultyGrade.EASY)
                 .setLineComment("강한 왕국을 만들어보자")
                 .setPublisher(kbg)
                 .setGeekData(36218, 7.611, 2.35)
@@ -175,6 +169,19 @@ class RepositoryTest {
         dominion.addGameImage("도미니언 이미지 2.jpg");
         dominion.addGameImage("도미니언 이미지 3.jpg");
         em.persist(dominion);
+
+        Boardgame silver = new Boardgame("실버", "Silver")
+                .setPublishedYear(2019)
+                .setPlayers(2,4,3)
+                .setLineComment("나조차 모르게 가장 낮은 패를 만들어보자")
+                .setPublisher(bm)
+                .setGeekData(278553, 7.05, 1.82)
+                .initMechanism(mech18)
+                .initCategorys(ct14);
+        silver.addGameImage("실버 이미지 1.jpg");
+        silver.addGameImage("실버 이미지 2.jpg");
+        silver.addGameImage("실버 이미지 3.jpg");
+        em.persist(silver);
 
         User user = new User("stikfas7@naver.com", "1234", "한재");
         user.addOwnBoardgame(terraforming_mars);
@@ -309,9 +316,11 @@ class RepositoryTest {
     public void 검색_테스트() {
         // given
         BoardgameFilter boardgameFilter = new BoardgameFilter();
-        boardgameFilter.addCategoryName("경제", "산업");
-        boardgameFilter.addMechanismsName("엔진", "경쟁");
-        boardgameFilter.setInnerName("마스");
+//        boardgameFilter.addCategoryName("경제", "산업");
+//        boardgameFilter.addMechanismsName("엔진", "경쟁");
+//        boardgameFilter.setInnerKorName("마스");
+        boardgameFilter.setPlayers(1);
+//        boardgameFilter.setDifficulty(DifficultyGrade.EASY);
 
         // when
         PageRequest pr = PageRequest.of(0, 20);

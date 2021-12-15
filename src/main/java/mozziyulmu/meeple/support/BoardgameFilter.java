@@ -1,23 +1,37 @@
-package mozziyulmu.meeple.searchFilter;
+package mozziyulmu.meeple.support;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import mozziyulmu.meeple.entity.Category;
-import mozziyulmu.meeple.entity.Mechanism;
+import mozziyulmu.meeple.entity.DifficultyGrade;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class BoardgameFilter {
-    private String innerName;
+    private String innerKorName;
+    private Integer players;
+    private DifficultyGrade difficultyGrade;
     private List<String> mechanismsName = new ArrayList<>();
     private List<String> categoriesName = new ArrayList<>();
 
-    public BoardgameFilter setInnerName(String innerName) {
-        this.innerName = innerName;
+    public BoardgameFilter() {
+        players = -1;
+    }
+
+    public BoardgameFilter setInnerKorName(String innerKorName) {
+        this.innerKorName = innerKorName;
+        return this;
+    }
+
+    public BoardgameFilter setPlayers(int players){
+        this.players = players;
+        return this;
+    }
+
+    public BoardgameFilter setDifficulty(DifficultyGrade difficultyGrade){
+        this.difficultyGrade = difficultyGrade;
         return this;
     }
 

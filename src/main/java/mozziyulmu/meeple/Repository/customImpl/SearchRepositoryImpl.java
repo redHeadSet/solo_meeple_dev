@@ -2,14 +2,11 @@ package mozziyulmu.meeple.Repository.customImpl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import mozziyulmu.meeple.Repository.custom.SearchRepositoryCustom;
 import mozziyulmu.meeple.dto.BoardgameListDto;
-import mozziyulmu.meeple.entity.Boardgame;
-import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
-import mozziyulmu.meeple.entity.Relation.BoardCategory.QBoardCateRT;
-import mozziyulmu.meeple.searchFilter.BoardgameFilter;
+import mozziyulmu.meeple.entity.DifficultyGrade;
+import mozziyulmu.meeple.support.BoardgameFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,7 +65,9 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom {
                 .from(boardgame)
                 .where(
                         inBoardgameIds(boardgameIds),
-                        likeBoardgameKorName(boardgameFilter.getInnerName())
+                        likeBoardgameKorName(boardgameFilter.getInnerKorName()),
+                        btwPlayers(boardgameFilter.getPlayers()),
+                        checkDifficulty(boardgameFilter.getDifficultyGrade())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -82,5 +81,13 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom {
     }
     BooleanExpression likeBoardgameKorName(String searchName){
         return (StringUtils.hasText(searchName)) ? boardgame.korName.like("%" + searchName + "%") : null;
+    }
+    BooleanExpression btwPlayers(Integer players){
+        if (players.intValue() <= 0)
+            return null;
+        return boardgame.minPlayer.loe(players).and(boardgame.maxPlayer.goe(players));
+    }
+    BooleanExpression checkDifficulty(DifficultyGrade difficultyGrade) {
+        return (difficultyGrade != null) ? boardgame.difficulty.eq(difficultyGrade) : null;
     }
 }

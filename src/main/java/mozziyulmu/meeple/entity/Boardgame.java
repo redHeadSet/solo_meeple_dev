@@ -116,16 +116,17 @@ public class Boardgame extends BaseUserData {
         return this;
     }
 
-    public Boardgame setDifficulty(DifficultyGrade difficulty) {
-        this.difficulty = difficulty;
-        return this;
-    }
-
     public Boardgame setGeekData(long geekId, double geekRating, double geekWeight) {
         this.geekId = Long.valueOf(geekId);
         this.geekRating = Double.valueOf(geekRating);
         this.geekWeight = Double.valueOf(geekWeight);
         this.geekLink = "https://boardgamegeek.com/boardgame/" + geekId;
+
+        if(geekWeight < 2.0) difficulty = DifficultyGrade.EASY;
+        else if (geekWeight < 3.3) difficulty = DifficultyGrade.MIDDLE;
+        else if (geekWeight < 3.8) difficulty = DifficultyGrade.HARD;
+        else difficulty = DifficultyGrade.MASTER;
+
         return this;
     }
 
