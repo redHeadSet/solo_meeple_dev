@@ -41,6 +41,7 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
         List<BoardgameListDto> contents = jpaQueryFactory
                 .select(Projections.constructor(BoardgameListDto.class, boardgame))
                 .from(boardgame)
+                .orderBy(boardgame.geekRating.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -57,6 +58,7 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
                 .select(Projections.constructor(BoardgameListDto.class, boardCateRT.boardgame))
                 .from(boardCateRT)
                 .where(boardCateRT.category.korName.eq(categoryKorName))
+                .orderBy(boardCateRT.boardgame.geekRating.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -76,6 +78,7 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
                 .select(Projections.constructor(BoardgameListDto.class, boardMechaRT.boardgame))
                 .from(boardMechaRT)
                 .where(boardMechaRT.mechanism.korName.eq(mechanismKorName))
+                .orderBy(boardMechaRT.boardgame.geekRating.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

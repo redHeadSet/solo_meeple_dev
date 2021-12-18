@@ -69,6 +69,7 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom {
                         btwPlayers(boardgameFilter.getPlayers()),
                         checkDifficulty(boardgameFilter.getDifficultyGrade())
                 )
+                .orderBy(boardgame.geekRating.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

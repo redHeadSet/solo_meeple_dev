@@ -230,7 +230,6 @@ class RepositoryTest {
         Page<BoardgameListDto> boardgameSimpleList = boardgameRepository.getBoardgameSimpleList(pr);
 
         // then
-        Assertions.assertThat(boardgameSimpleList.getTotalElements()).isEqualTo(6);
         for (BoardgameListDto each : boardgameSimpleList) {
             System.out.println(each.toString());
         }
@@ -319,7 +318,7 @@ class RepositoryTest {
 //        boardgameFilter.addCategoryName("경제", "산업");
 //        boardgameFilter.addMechanismsName("엔진", "경쟁");
 //        boardgameFilter.setInnerKorName("마스");
-        boardgameFilter.setPlayers(1);
+//        boardgameFilter.setPlayers(1);
 //        boardgameFilter.setDifficulty(DifficultyGrade.EASY);
 
         // when
