@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mozziyulmu.meeple.entity.BaseEntity.BaseTimeData;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class News extends BaseTimeData {
     private Long id;
 
     private String title;
-    private String text;
+//    private String text;
     private String url;
 
     private LocalDateTime writeTime;
@@ -31,10 +32,10 @@ public class News extends BaseTimeData {
         this.title = title;
     }
 
-    public News setText(String text){
-        this.text = text;
-        return this;
-    }
+//    public News setText(String text){
+//        this.text = text;
+//        return this;
+//    }
 
     public News setUrl(String url) {
         this.url = url;
