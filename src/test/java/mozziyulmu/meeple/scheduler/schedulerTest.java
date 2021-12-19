@@ -9,8 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class crawlingNewsTest {
+class schedulerTest {
     @Autowired NewsRepository newsRepository;
+    @Autowired CrawlingBoardgameInfo crawlingBoardgameInfo;
 
     @Test
     @Commit
@@ -19,4 +20,11 @@ class crawlingNewsTest {
         crawlingNews.crawlingNews_chedule();
     }
 
+    @Test
+    @Commit
+    public void setBoardgameInfo() {
+//        crawlingBoardgameInfo.setCategory();
+//        crawlingBoardgameInfo.setMechanism();
+        crawlingBoardgameInfo.getBoardgameInfo();
+    }
 }
