@@ -6,10 +6,7 @@ import mozziyulmu.meeple.Repository.CategoryRepository;
 import mozziyulmu.meeple.Repository.MechanismRepository;
 import mozziyulmu.meeple.entity.Category;
 import mozziyulmu.meeple.entity.Mechanism;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,9 +16,19 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CrawlingBoardgameInfo {
+    private final RestTemplate restTemplate;
     private final BoardgameRepository boardgameRepository;
     private final CategoryRepository categoryRepository;
     private final MechanismRepository mechanismRepository;
+
+    enum BOARDGAME_COMPANY_ID{
+        KOREA_BOARDGAMES("8291"),
+        POPCORN_GAMES("41167");
+
+        private final String value;
+        BOARDGAME_COMPANY_ID(String value) {this.value = value;}
+        public String getValue() {return value;}
+    }
 
     private class DataSet{
         String korName;
@@ -335,63 +342,31 @@ public class CrawlingBoardgameInfo {
     // 해당 번호로 BGG v2 API 통신으로 보드게임 정보 획득
     public void getBoardgameInfo() {
         try {
-            getBoardgameInfo_KoreaBoardgames();
+            getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID.KOREA_BOARDGAMES);
+//            getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID.POPCORN_GAMES);
         } catch (Exception e){
             String message = e.getMessage();
             e.printStackTrace();
         }
     }
 
-    public void getBoardgameInfo_KoreaBoardgames() throws IOException {
-        String crawlingBaseUrl = "https://boardgamegeek.com/boardgamepublisher/8291/korea-boardgames-co-ltd/linkeditems/boardgamepublisher";
-        Document document = Jsoup.connect(crawlingBaseUrl).get();
+    public void getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID company_id) throws IOException {
+        /*
+        * https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objectid=8291&objecttype=company&pageid=1&showcount=50&sort=name&subtype=boardgamepublisher
+        * 해당 경로로 get 방식 json 데이터 파싱 가능
+        * 1회 최대 50개 파싱 가능
+        * pageid 변경
+        * objectid 변경으로 회사 변경 가능
+        * 총 데이터 : config/numitems
+        * 아이템 번호 : items배열/ "href": "/boardgame/878/wyatt-earp",
+        * */
 
-        Elements ele1  = document.getElementsByClass("global-body-content-container container-fluid");
-        Elements ele2  = ele1.get(0).getElementsByClass("global-body-content");
-        Elements geekitem = ele2.get(0).getElementsByTag("geekitem");
-        for(Element each : geekitem){
-            String text = each.text();
-            text.getClass();
-        }
-
-        Elements ele3  = ele2.get(0).getElementsByClass("content");
-        Elements ele4  = ele3.get(0).getElementsByClass("ng-scope");
-        Elements ele5  = ele4.get(0).getElementsByClass("ng-scope");
-        Elements ele6  = ele5.get(0).getElementsByClass("game");
-        Elements ele7  = ele6.get(0).getElementsByClass("game-secondary");
-        Elements ele8  = ele7.get(0).getElementsByClass("ng-scope");
-        Elements ele9  = ele8.get(0).getElementsByClass("ng-scope");
-        Elements ele10 = ele9.get(0).getElementsByClass("global-body-content-primary");
-        Elements ele11 = ele10.get(0).getElementsByClass("row");
-        Elements ele12 = ele11.get(0).getElementsByClass("col-table-primary");
-        Elements ele13 = ele12.get(0).getElementsByClass("ng-scope");
-        Elements ele14 = ele13.get(0).getElementsByClass("global-body-content-primary");
-        Elements ele15 = ele14.get(0).getElementsByClass("ng-isolate-scope");
-        Elements ele16 = ele15.get(0).getElementsByClass("panel");
-        Elements ele17 = ele16.get(0).getElementsByClass("panel-body");
-        Elements ele18 = ele17.get(0).getElementsByClass("summary");
-        Elements ele19 = ele18.get(0).getElementsByClass("summary-item");
-        Elements ele20 = ele19.get(0).getElementsByClass("media-body");
-
-        // global-body-content-container container-fluid
-        // global-body-content pending ready
-        // content ng-isolate-scope
-        //
-        // ng-scope
-        // game ng-scope
-        // game-secondary
-        // ng-scope
-        // ng-scope
-        // global-body-content-primary ng-scope
-        // row row-table row-table-block-xs
-        // col-table-primary
-        // ng-scope
-        // global-body-content-primary ng-scope
-        // ng-isolate-scope
-        // panel
-        // panel-body
-        // summary summary-border
-        // summary-item ng-scope ng-isolate-scope (여러개)
-        // media-body
+        String url = "https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objecttype=company&showcount=50&sort=name&subtype=boardgamepublisher" +
+                     "&objectid=" + company_id.getValue();
+        int page = 1;
+        String pageUrl = "&pageid=" + page;
+        String jsonData = restTemplate.getForObject(url+pageUrl, String.class);
+        System.out.println("여기서부터 출력이요");
+        System.out.println(jsonData);
     }
 }
