@@ -1,15 +1,17 @@
 package mozziyulmu.meeple.scheduler;
 
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import mozziyulmu.meeple.Repository.BoardgameRepository;
 import mozziyulmu.meeple.Repository.CategoryRepository;
 import mozziyulmu.meeple.Repository.MechanismRepository;
 import mozziyulmu.meeple.entity.Category;
 import mozziyulmu.meeple.entity.Mechanism;
+import mozziyulmu.meeple.scheduler.jsonForm.ParseGeekGameData;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import org.json.XML;
 import java.util.Arrays;
 import java.util.List;
 
@@ -342,7 +344,7 @@ public class CrawlingBoardgameInfo {
     // 해당 번호로 BGG v2 API 통신으로 보드게임 정보 획득
     public void getBoardgameInfo() {
         try {
-            getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID.KOREA_BOARDGAMES);
+            getBoardgameInfo_geekPublisher(BOARDGAME_COMPANY_ID.KOREA_BOARDGAMES);
 //            getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID.POPCORN_GAMES);
         } catch (Exception e){
             String message = e.getMessage();
@@ -350,8 +352,9 @@ public class CrawlingBoardgameInfo {
         }
     }
 
-    public void getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID company_id) throws IOException {
+    public void getBoardgameInfo_geekPublisher(BOARDGAME_COMPANY_ID company_id) throws Exception {
         /*
+        * step 1.
         * https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objectid=8291&objecttype=company&pageid=1&showcount=50&sort=name&subtype=boardgamepublisher
         * 해당 경로로 get 방식 json 데이터 파싱 가능
         * 1회 최대 50개 파싱 가능
@@ -361,12 +364,48 @@ public class CrawlingBoardgameInfo {
         * 아이템 번호 : items배열/ "href": "/boardgame/878/wyatt-earp",
         * */
 
-        String url = "https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objecttype=company&showcount=50&sort=name&subtype=boardgamepublisher" +
-                     "&objectid=" + company_id.getValue();
-        int page = 1;
-        String pageUrl = "&pageid=" + page;
-        String jsonData = restTemplate.getForObject(url+pageUrl, String.class);
-        System.out.println("여기서부터 출력이요");
-        System.out.println(jsonData);
+//        List<String> boardgameNos = new ArrayList<>();
+//        String publisherUrl = "https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objecttype=company&showcount=50&sort=name&subtype=boardgamepublisher" +
+//                     "&objectid=" + company_id.getValue();
+//        int page = 1, max_page = 0;
+//        boolean once = false;
+//        do {
+//            String pageUrl = "&pageid=" + page;
+//            Gson gson = new Gson();
+//            ParseGeekPublisher parseGeekPublisher
+//                    = gson.fromJson(
+//                            restTemplate.getForObject(publisherUrl + pageUrl, String.class),
+//                            ParseGeekPublisher.class
+//                        );
+//
+//            // 보드게임 ID만 저장 -> 아래에서 해당 ID로 BGG API v2로 통신
+//            for (ParseGeekPublisher.Item item : parseGeekPublisher.getItems())
+//                boardgameNos.add(item.getObjectid());
+//
+//            if(!once){
+//                max_page = (parseGeekPublisher.getConfig().getNumitems() / 50) + 1;
+//                once = true;
+//            }
+//
+//            page++;
+//        } while (page <= max_page);
+
+        /*
+        * step 2.
+        * https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=167791,13,14,15
+        * 한 번에 여러 개의 요청을 보내야 할 거 같음... 너무 자주 보내면 에러 발생
+        * */
+
+        String gameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=";
+//        for (String boardgameNo : boardgameNos){
+
+            String forObject = restTemplate.getForObject(gameUrl + "167791,167791", String.class);
+            String jsonObject = XML.toJSONObject(forObject).toString();
+            Gson gson = new Gson();
+        ParseGeekGameData parseGeekGameData = gson.fromJson(jsonObject, ParseGeekGameData.class);
+
+
+        System.out.println();
+//        }
     }
 }

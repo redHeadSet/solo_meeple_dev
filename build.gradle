@@ -44,7 +44,9 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.14.3'
 
 	// http 요청
-	implementation 'org.apache.httpcomponents:httpclient:4.5'
+	implementation 'org.apache.httpcomponents:httpclient'
+	implementation 'com.google.code.gson:gson'
+	implementation 'org.json:json:20211205'
 }
 
 test {
