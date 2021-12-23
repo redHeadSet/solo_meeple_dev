@@ -1,5 +1,8 @@
 package mozziyulmu.meeple.scheduler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import mozziyulmu.meeple.Repository.BoardgameRepository;
@@ -396,16 +399,20 @@ public class CrawlingBoardgameInfo {
         * 한 번에 여러 개의 요청을 보내야 할 거 같음... 너무 자주 보내면 에러 발생
         * */
 
-        String gameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=";
+//        String gameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=";
 //        for (String boardgameNo : boardgameNos){
+//            String forObject = restTemplate.getForObject(gameUrl + boardgameNo, String.class);
+//        }
 
-            String forObject = restTemplate.getForObject(gameUrl + "167791,167791", String.class);
-            String jsonObject = XML.toJSONObject(forObject).toString();
-            Gson gson = new Gson();
-        ParseGeekGameData parseGeekGameData = gson.fromJson(jsonObject, ParseGeekGameData.class);
+        String testGameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=167791,167791";
+        String xmlString = restTemplate.getForObject(testGameUrl, String.class);
+
+        JacksonXmlModule module = new JacksonXmlModule();
+        module.setDefaultUseWrapper(false);
+        XmlMapper xmlMapper = new XmlMapper(module);
+        ParseGeekGameData parseGeekGameData = xmlMapper.readValue(xmlString, ParseGeekGameData.class);
 
 
         System.out.println();
-//        }
     }
 }

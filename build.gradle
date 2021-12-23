@@ -47,6 +47,7 @@ dependencies {
 	implementation 'org.apache.httpcomponents:httpclient'
 	implementation 'com.google.code.gson:gson'
 	implementation 'org.json:json:20211205'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 }
 
 test {
