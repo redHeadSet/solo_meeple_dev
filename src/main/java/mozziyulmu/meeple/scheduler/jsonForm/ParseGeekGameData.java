@@ -2,6 +2,9 @@ package mozziyulmu.meeple.scheduler.jsonForm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import mozziyulmu.meeple.entity.Boardgame;
+import mozziyulmu.meeple.entity.Publisher;
+import org.springframework.util.StringUtils;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -52,9 +55,26 @@ public class ParseGeekGameData {
     }
 
     @Data
+    @XmlRootElement(name = "link")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class LinkData{
+        @XmlAttribute(name = "type")
+        private String type;
+        // boardgamecategory = 카테고리
+        // boardgamemechanic = 매커니즘
+        @XmlAttribute(name = "id")
+        private String id;
+        @XmlAttribute(name = "value")
+        private String value;
+    }
+
+    @Data
     @XmlRootElement(name = "item")
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Item{
+    public static class Item {
+        @XmlAttribute(name = "type")
+        private String type;
+
         @XmlAttribute(name = "id")
         private String id;
 
@@ -84,6 +104,9 @@ public class ParseGeekGameData {
 
         @XmlElement(name = "statistics")
         private Statistics statistics;
+
+        @XmlElement(name = "link")
+        private List<LinkData> link = new ArrayList<>();
     }
 
     @XmlElement(name = "item")

@@ -9,4 +9,6 @@ import java.util.List;
 public interface MechanismRepository extends JpaRepository<Mechanism, Long> {
     @Query("select mech.korName from Mechanism mech")
     List<String> findAllMechanismKorName();
+
+    Mechanism findByEngName(String engName);
 }

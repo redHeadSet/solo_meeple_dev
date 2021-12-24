@@ -1,6 +1,5 @@
 package mozziyulmu.meeple.scheduler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.gson.Gson;
@@ -8,13 +7,18 @@ import lombok.RequiredArgsConstructor;
 import mozziyulmu.meeple.Repository.BoardgameRepository;
 import mozziyulmu.meeple.Repository.CategoryRepository;
 import mozziyulmu.meeple.Repository.MechanismRepository;
+import mozziyulmu.meeple.Repository.PublisherRepository;
+import mozziyulmu.meeple.entity.Boardgame;
 import mozziyulmu.meeple.entity.Category;
 import mozziyulmu.meeple.entity.Mechanism;
+import mozziyulmu.meeple.entity.Publisher;
 import mozziyulmu.meeple.scheduler.jsonForm.ParseGeekGameData;
+import mozziyulmu.meeple.scheduler.jsonForm.ParseGeekPublisher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 
-import org.json.XML;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,14 +29,23 @@ public class CrawlingBoardgameInfo {
     private final BoardgameRepository boardgameRepository;
     private final CategoryRepository categoryRepository;
     private final MechanismRepository mechanismRepository;
+    private final PublisherRepository publisherRepository;
 
-    enum BOARDGAME_COMPANY_ID{
-        KOREA_BOARDGAMES("8291"),
-        POPCORN_GAMES("41167");
+    static final int ONCE_GEEK_QUERY_COUNT = 50;
+
+    enum BOARDGAME_COMPANY {
+        KOREA_BOARDGAMES("8291", "코리아 보드게임즈"),
+        POPCORN_GAMES("41167", "팝콘 게임즈");
 
         private final String value;
-        BOARDGAME_COMPANY_ID(String value) {this.value = value;}
+        private final String name;
+
+        BOARDGAME_COMPANY(String value, String name) {
+            this.value = value;
+            this.name = name;
+        }
         public String getValue() {return value;}
+        public String getName() {return name;}
     }
 
     private class DataSet{
@@ -60,18 +73,18 @@ public class CrawlingBoardgameInfo {
     public void setCategory(){
         List<DataSet> dataSets = Arrays.asList(
                 new DataSet("추상 전략", "Abstract Strategy"),
-                new DataSet("액션/순발력", "Action/Dexterity"),
-                new DataSet("어드벤처/영웅담", "Adventure"),
+                new DataSet("액션 / 순발력", "Action / Dexterity"),
+                new DataSet("어드벤처 / 영웅담", "Adventure"),
                 new DataSet("이성의 시대", "Age of Reason"), // 영국/프랑스 18세기
                 new DataSet("미국 남북 전쟁", "American Civil War"),
                 new DataSet("인디언 전쟁", "American Indian War"),
                 new DataSet("미국 독립 전쟁", "American Revolutionary War"),
                 new DataSet("미국 서부", "American West"),
-                new DataSet("고대/기원전", "Ancient"),
+                new DataSet("고대 / 기원전", "Ancient"),
                 new DataSet("동물", "Animals"),
                 new DataSet("아라비아", "Arabian"),
-                new DataSet("항공/비행", "Aviation/Flight"),
-                new DataSet("블러핑/속임수", "Bluffing"),
+                new DataSet("항공 / 비행", "Aviation / Flight"),
+                new DataSet("블러핑 / 속임수", "Bluffing"),
                 new DataSet("책", "Book"),   // 스토리텔링, 규칙서 등
                 new DataSet("카드 게임", "Card Game"),
                 new DataSet("어린이용 게임", "Children's Game"),
@@ -79,39 +92,39 @@ public class CrawlingBoardgameInfo {
                 new DataSet("내전", "Civil War"),
                 new DataSet("문명", "Civilization"),
                 new DataSet("구성 요소 수집", "Collectible Components"), // 구성 요소를 나눠 구매하는 게임
-                new DataSet("만화책/스트립", "Comic Book/Strip"),
-                new DataSet("추리/추론", "Deduction"),
+                new DataSet("만화책 / 스트립", "Comic Book / Strip"),
+                new DataSet("추리 / 추론", "Deduction"),
                 new DataSet("주사위", "Dice"),
-                new DataSet("경제/경영/자원 관리", "Economic"),
-                new DataSet("교육용/교육적", "Educational"),
+                new DataSet("경제 / 경영 / 자원 관리", "Economic"),
+                new DataSet("교육용 / 교육적", "Educational"),
                 new DataSet("전자 장치", "Electronic"), // 회로, 컴퓨터 등이 게임에 포함
                 new DataSet("환경", "Environmental"),
                 new DataSet("게임 확장", "Expansion for Base-game"),
                 new DataSet("탐험", "Exploration"),
                 new DataSet("팬 확장", "Fan Expansion"),   // 비공식 팬 확장 게임
                 new DataSet("판타지", "Fantasy"),
-                new DataSet("농업/농사", "Farming"),
+                new DataSet("농업 / 농사", "Farming"),
                 new DataSet("전투", "Fighting"),
                 new DataSet("게임 시스템", "Game System"),   // 구성 요소가 없는 게임
                 new DataSet("공포", "Horror"),
                 new DataSet("유머", "Humor"),
-                new DataSet("산업/제조/상품 관리", "Industry/Manufacturing"),
+                new DataSet("산업 / 제조 / 상품 관리", "Industry / Manufacturing"),
                 new DataSet("한국 전쟁", "Korean War"),
                 new DataSet("마피아", "Mafia"),
                 new DataSet("수학", "Math"),
-                new DataSet("성인", "Mature/Adult"),
+                new DataSet("성인", "Mature / Adult"),
                 new DataSet("미로", "Maze"),
                 new DataSet("의학", "Medical"),
                 new DataSet("중세 시대", "Medieval"),
                 new DataSet("기억력", "Memory"),
                 new DataSet("미니어처", "Miniatures"),
                 new DataSet("현대 전쟁", "Modern Warfare"), // 2차 세계대전 이후
-                new DataSet("영화/TV/라디오", "Movies/TV/Radio theme"),
-                new DataSet("살인/미스터리", "Murder/Mystery"),
+                new DataSet("영화 / TV / 라디오", "Movies / TV / Radio theme"),
+                new DataSet("살인 / 미스터리", "Murder/Mystery"),
                 new DataSet("음악", "Music"),
-                new DataSet("신화/고대 문명", "Mythology"),
+                new DataSet("신화 / 고대 문명", "Mythology"),
                 new DataSet("나폴레옹 전쟁", "Napoleonic"),
-                new DataSet("바다/해상", "Nautical"),
+                new DataSet("바다 / 해상", "Nautical"),
                 new DataSet("협상", "Negotiation"),
                 new DataSet("소설 기반", "Novel-based"),
                 new DataSet("숫자 기반", "Number"),
@@ -131,14 +144,14 @@ public class CrawlingBoardgameInfo {
                 new DataSet("우주 탐사", "Space Exploration"),
                 new DataSet("스파이", "Spies/Secret Agents"),
                 new DataSet("스포츠", "Sports"),
-                new DataSet("영토 관리/영역 건설", "Territory Building"),
-                new DataSet("철도/기차", "Trains"),
+                new DataSet("영토 관리 / 영역 건설", "Territory Building"),
+                new DataSet("철도 / 기차", "Trains"),
                 new DataSet("교통", "Transportation"),
                 new DataSet("여행", "Travel"),
                 new DataSet("퀴즈", "Trivia"),
                 new DataSet("비디오 게임 기반", "Video Game Theme"),
                 new DataSet("베트남 전쟁", "Vietnam War"),
-                new DataSet("전쟁/군사 행동/워게임", "Wargame"),
+                new DataSet("전쟁 / 군사 행동 / 워게임", "Wargame"),
                 new DataSet("단어 게임", "Word Game"),
                 new DataSet("제 1 차 세계 대전", "World War I"),
                 new DataSet("제 2 차 세계 대전", "World War II"),
@@ -347,15 +360,16 @@ public class CrawlingBoardgameInfo {
     // 해당 번호로 BGG v2 API 통신으로 보드게임 정보 획득
     public void getBoardgameInfo() {
         try {
-            getBoardgameInfo_geekPublisher(BOARDGAME_COMPANY_ID.KOREA_BOARDGAMES);
+            getBoardgamesInfoFromPublisher(BOARDGAME_COMPANY.KOREA_BOARDGAMES);
 //            getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID.POPCORN_GAMES);
         } catch (Exception e){
             String message = e.getMessage();
             e.printStackTrace();
+            System.out.println("에러 발생 : " + message);
         }
     }
 
-    public void getBoardgameInfo_geekPublisher(BOARDGAME_COMPANY_ID company_id) throws Exception {
+    public void getBoardgamesInfoFromPublisher(BOARDGAME_COMPANY company_id) throws Exception {
         /*
         * step 1.
         * https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objectid=8291&objecttype=company&pageid=1&showcount=50&sort=name&subtype=boardgamepublisher
@@ -366,53 +380,132 @@ public class CrawlingBoardgameInfo {
         * 총 데이터 : config/numitems
         * 아이템 번호 : items배열/ "href": "/boardgame/878/wyatt-earp",
         * */
-
-//        List<String> boardgameNos = new ArrayList<>();
-//        String publisherUrl = "https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objecttype=company&showcount=50&sort=name&subtype=boardgamepublisher" +
-//                     "&objectid=" + company_id.getValue();
-//        int page = 1, max_page = 0;
-//        boolean once = false;
-//        do {
-//            String pageUrl = "&pageid=" + page;
-//            Gson gson = new Gson();
-//            ParseGeekPublisher parseGeekPublisher
-//                    = gson.fromJson(
-//                            restTemplate.getForObject(publisherUrl + pageUrl, String.class),
-//                            ParseGeekPublisher.class
-//                        );
-//
-//            // 보드게임 ID만 저장 -> 아래에서 해당 ID로 BGG API v2로 통신
-//            for (ParseGeekPublisher.Item item : parseGeekPublisher.getItems())
-//                boardgameNos.add(item.getObjectid());
-//
-//            if(!once){
-//                max_page = (parseGeekPublisher.getConfig().getNumitems() / 50) + 1;
-//                once = true;
-//            }
-//
-//            page++;
-//        } while (page <= max_page);
+        List<String> boardgameNos = getPublisherBoardgamesId(company_id);
 
         /*
         * step 2.
         * https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=167791,13,14,15
         * 한 번에 여러 개의 요청을 보내야 할 거 같음... 너무 자주 보내면 에러 발생
         * */
+        setBoardgameInfo(boardgameNos, company_id);
+    }
 
-//        String gameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=";
-//        for (String boardgameNo : boardgameNos){
-//            String forObject = restTemplate.getForObject(gameUrl + boardgameNo, String.class);
-//        }
+    private List<String> getPublisherBoardgamesId(BOARDGAME_COMPANY company) throws Exception {
+        List<String> boardgameIds = new ArrayList<>();
+        String publisherUrl = "https://api.geekdo.com/api/geekitem/linkeditems?ajax=1&linkdata_index=boardgame&nosession=1&objecttype=company&showcount=50&sort=name&subtype=boardgamepublisher" +
+                "&objectid=" + company.getValue();
+        int page = 1, max_page = 0;
+        boolean once = false;
+        Gson gson = new Gson();
 
-        String testGameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=167791,167791";
-        String xmlString = restTemplate.getForObject(testGameUrl, String.class);
+        do {
+            String pageUrl = "&pageid=" + page;
+            ParseGeekPublisher parseGeekPublisher
+                    = gson.fromJson(
+                    restTemplate.getForObject(publisherUrl + pageUrl, String.class),
+                    ParseGeekPublisher.class
+            );
 
+            for (ParseGeekPublisher.Item item : parseGeekPublisher.getItems())
+                boardgameIds.add(item.getObjectid());
+
+            if(!once){
+                max_page = (parseGeekPublisher.getConfig().getNumitems() / 50) + 1;
+                once = true;
+            }
+
+            page++;
+        } while (page <= max_page);
+
+        return boardgameIds;
+    }
+
+    private void setBoardgameInfo(List<String> boardgameIds, BOARDGAME_COMPANY company) throws Exception {
+        Publisher publisher = publisherRepository.findByKorName(company.getName());
+        if (publisher == null)
+            return;
+
+        String gameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=";
+        String tenGames = "";
+        int count = 0, cum_count = 0;
         JacksonXmlModule module = new JacksonXmlModule();
         module.setDefaultUseWrapper(false);
         XmlMapper xmlMapper = new XmlMapper(module);
-        ParseGeekGameData parseGeekGameData = xmlMapper.readValue(xmlString, ParseGeekGameData.class);
 
+        for (String boardgameNo : boardgameIds){
+            tenGames += boardgameNo;
+            count++;
+            cum_count++;
 
-        System.out.println();
+            if((count < ONCE_GEEK_QUERY_COUNT) && (cum_count != boardgameIds.size())){
+                tenGames += ",";
+                continue;
+            }
+            else{
+                ParseGeekGameData parseGeekGameData
+                        = xmlMapper.readValue(
+                        restTemplate.getForObject(gameUrl + tenGames, String.class),
+                        ParseGeekGameData.class
+                );
+
+                for (ParseGeekGameData.Item item : parseGeekGameData.getItem()) {
+                    if( ! item.getType().equals("boardgame")) // boardgameexpansion 제외
+                        continue;
+
+                    String engName = "", korName = "";
+                    for (ParseGeekGameData.NameData nameData : item.getName()){
+                        if(nameData.getValue().matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*"))
+                            korName = nameData.getValue();
+                        else if(nameData.getType().equals("primary"))
+                            engName = nameData.getValue();
+                    }
+                    if (!StringUtils.hasText(engName))
+                        engName = korName;
+                    else if(!StringUtils.hasText(korName))
+                        korName = engName;
+
+                    List<Category> categories = new ArrayList<>();
+                    List<Mechanism> mechanisms = new ArrayList<>();
+                    for (ParseGeekGameData.LinkData linkData : item.getLink()) {
+                        if(linkData.getType().equals("boardgamecategory")){
+                            Category category = categoryRepository.findByEngName(linkData.getValue());
+                            if(category != null)
+                                categories.add(category);
+                        }
+                        if(linkData.getType().equals("boardgamemechanic")){
+                            Mechanism mechanism = mechanismRepository.findByEngName(linkData.getValue());
+                            if(mechanism != null)
+                                mechanisms.add(mechanism);
+                        }
+                    }
+
+                    Boardgame boardgame = new Boardgame(korName, engName)
+                            .setPlayers(Integer.parseInt(item.getMinplayers().getValue()),
+                                    Integer.parseInt(item.getMaxplayers().getValue()),
+                                    0)
+                            .setPlayingTime(Integer.parseInt(item.getPlayingtime().getValue()),
+                                    Integer.parseInt(item.getPlayingtime().getValue()))
+                            .setPublishedYear(Integer.parseInt(item.getYearpublished().getValue()))
+                            .setAge(Integer.parseInt(item.getMinage().getValue()))
+                            .setGeekData(
+                                    Integer.parseInt(item.getId()),
+                                    Double.parseDouble(item.getStatistics().getRatings().getAverage().getValue()),
+                                    Double.parseDouble(item.getStatistics().getRatings().getAverageweight().getValue())
+                            )
+                            .setLineComment("")
+                            .setPublisher(publisher)
+                            .initCategorys(categories)
+                            .initMechanism(mechanisms);
+
+                    if(StringUtils.hasText(item.getImage()))
+                        boardgame.addGameImage(item.getImage());
+
+                    boardgameRepository.save(boardgame);
+                }
+
+                tenGames = "";
+                count = 0;
+            }
+        }
     }
 }

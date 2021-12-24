@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 class schedulerTest {
     @Autowired NewsRepository newsRepository;
     @Autowired CrawlingBoardgameInfo crawlingBoardgameInfo;
+    @Autowired InitPublishers initPublishers;
 
     @Test
     @Commit
@@ -23,8 +24,9 @@ class schedulerTest {
     @Test
     @Commit
     public void setBoardgameInfo() {
-//        crawlingBoardgameInfo.setCategory();
-//        crawlingBoardgameInfo.setMechanism();
+        initPublishers.setPublishers();
+        crawlingBoardgameInfo.setCategory();
+        crawlingBoardgameInfo.setMechanism();
         crawlingBoardgameInfo.getBoardgameInfo();
     }
 }

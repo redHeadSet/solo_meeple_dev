@@ -31,9 +31,9 @@ public class Mechanism extends BaseUserData {
 
     // ========================================================================
     // 보드게임에서 매커니즘 추가 가능, 반대는 불가능
-    public Mechanism(String kor_name, String eng_name) {
-        this.korName = kor_name;
-        this.engName = eng_name;
+    public Mechanism(String korName, String engName) {
+        this.korName = korName;
+        this.engName = engName;
     }
 
     public void setDesc(String description){

@@ -150,7 +150,35 @@ public class Boardgame extends BaseUserData {
         return this;
     }
 
+    public Boardgame initMechanism(List<Mechanism> inputMachanisms){
+        mechanisms.clear();
+        prtRepKorMechnism = "";
+        int count = 3;
+        for (Mechanism eachMechanism : inputMachanisms){
+            addMechanism(eachMechanism);
+            if(count > 0){
+                prtRepKorMechnism += ("#" + eachMechanism.getKorName() + " ");
+                count--;
+            }
+        }
+        return this;
+    }
+
     public Boardgame initCategorys(Category... inputCategorys){
+        categorys.clear();
+        prtRepKorCategory = "";
+        int count = 3;
+        for (Category eachCategory : inputCategorys){
+            addCategory(eachCategory);
+            if(count > 0){
+                prtRepKorCategory += ("#" + eachCategory.getKorName() + " ");
+                count--;
+            }
+        }
+        return this;
+    }
+
+    public Boardgame initCategorys(List<Category> inputCategorys){
         categorys.clear();
         prtRepKorCategory = "";
         int count = 3;
