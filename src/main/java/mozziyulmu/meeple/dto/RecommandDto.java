@@ -1,7 +1,6 @@
 package mozziyulmu.meeple.dto;
 
 import lombok.Getter;
-import mozziyulmu.meeple.entity.Boardgame;
 import mozziyulmu.meeple.entity.Recommand;
 
 import java.util.List;

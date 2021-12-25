@@ -14,4 +14,7 @@ public interface BoardgameReposirotyCustom {
     public Page<BoardgameListDto> getBoardgameInMechanism(String mechanismKorName, Pageable pageable);
 
     public List<BoardgameListDto> getBoardgameInRecommand(Long recommandId);
+
+    public List<String> getBoardgameMechanismNames(Long BoardgameId);
+    public List<String> getBoardgameCategoryNames(Long BoardgameId);
 }

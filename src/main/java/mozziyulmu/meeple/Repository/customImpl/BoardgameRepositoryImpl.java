@@ -97,4 +97,22 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
                 .orderBy(boardRecomRT.boardgame.geekRating.desc())
                 .fetch();
     }
+
+    @Override
+    public List<String> getBoardgameMechanismNames(Long BoardgameId) {
+        return jpaQueryFactory
+                .select(boardMechaRT.mechanism.korName)
+                .from(boardMechaRT)
+                .where(boardMechaRT.boardgame.id.eq(BoardgameId))
+                .fetch();
+    }
+
+    @Override
+    public List<String> getBoardgameCategoryNames(Long BoardgameId) {
+        return jpaQueryFactory
+                .select(boardCateRT.category.korName)
+                .from(boardCateRT)
+                .where(boardCateRT.boardgame.id.eq(BoardgameId))
+                .fetch();
+    }
 }
