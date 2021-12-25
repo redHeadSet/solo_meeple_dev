@@ -2,17 +2,14 @@ package mozziyulmu.meeple.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import mozziyulmu.meeple.Repository.NewsRepository;
-import mozziyulmu.meeple.entity.Images;
 import mozziyulmu.meeple.entity.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

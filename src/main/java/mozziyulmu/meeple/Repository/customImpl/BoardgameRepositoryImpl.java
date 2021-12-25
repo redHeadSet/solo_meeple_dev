@@ -11,6 +11,7 @@ import mozziyulmu.meeple.entity.QCategory;
 import mozziyulmu.meeple.entity.Relation.BoardCategory.BoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardCategory.QBoardCateRT;
 import mozziyulmu.meeple.entity.Relation.BoardMechanism.QBoardMechaRT;
+import mozziyulmu.meeple.entity.Relation.BoardRecom.QBoardRecomRT;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import static mozziyulmu.meeple.entity.QBoardgame.boardgame;
 import static mozziyulmu.meeple.entity.QCategory.category;
 import static mozziyulmu.meeple.entity.Relation.BoardCategory.QBoardCateRT.boardCateRT;
 import static mozziyulmu.meeple.entity.Relation.BoardMechanism.QBoardMechaRT.boardMechaRT;
+import static mozziyulmu.meeple.entity.Relation.BoardRecom.QBoardRecomRT.boardRecomRT;
 
 public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
     private final EntityManager entityManager;
@@ -84,5 +86,15 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
                 .fetch();
 
         return new PageImpl<>(contents, pageable, contents.size());
+    }
+
+    // 추천 리스트는 Page 처리만큼 많지 않을 거라 예상, Page 처리 제외
+    public List<BoardgameListDto> getBoardgameInRecommand(Long recommandId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(BoardgameListDto.class, boardRecomRT.boardgame))
+                .from(boardRecomRT)
+                .where(boardRecomRT.recommand.id.eq(recommandId))
+                .orderBy(boardRecomRT.boardgame.geekRating.desc())
+                .fetch();
     }
 }

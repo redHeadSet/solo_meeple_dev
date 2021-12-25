@@ -56,7 +56,8 @@ public class Recommand extends BaseTimeData {
     }
 
     public Recommand addBoardgame(Boardgame boardgame){
-        boardgames.add(new BoardRecomRT(this, boardgame));
+        if(boardgame != null)
+            boardgames.add(new BoardRecomRT(this, boardgame));
         return this;
     }
 }

@@ -11,4 +11,7 @@ public interface MechanismRepository extends JpaRepository<Mechanism, Long> {
     List<String> findAllMechanismKorName();
 
     Mechanism findByEngName(String engName);
+    Mechanism findByKorName(String korName);
+
+    // 매커니즘별 보드게임은 BoardgameRepositoryImpl 처리
 }

@@ -12,5 +12,5 @@ public interface BoardgameRepository extends JpaRepository<Boardgame, Long>, Boa
 
     List<Boardgame> findAll();
 
-    List<Boardgame> findByKorName(String korName);
+    Optional<Boardgame> findByKorName(String korName);
 }

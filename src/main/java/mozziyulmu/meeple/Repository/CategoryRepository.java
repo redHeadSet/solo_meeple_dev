@@ -11,5 +11,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<String> findAllCategoryKorName();
 
     Category findByEngName(String engName);
+    Category findByKorName(String korName);
     // 카테고리별 보드게임은 BoardgameRepositoryImpl 처리
 }

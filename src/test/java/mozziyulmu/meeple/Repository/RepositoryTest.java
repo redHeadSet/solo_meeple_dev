@@ -225,7 +225,7 @@ class RepositoryTest {
         // given
 
         // when
-        List<Boardgame> findOne = boardgameRepository.findByKorName("테라포밍 마스");
+        Optional<Boardgame> findOne = boardgameRepository.findByKorName("테라포밍 마스");
         PageRequest pr = PageRequest.of(0, 20);
         Page<BoardgameListDto> boardgameSimpleList = boardgameRepository.getBoardgameSimpleList(pr);
 
@@ -260,14 +260,20 @@ class RepositoryTest {
 
         // when
         Optional<Recommand> opt_find = recommandRepository.findByTitle("3인 추천 게임");
-        if (!opt_find.isPresent())
-            fail();
-        Recommand find = opt_find.get();
+
+        Recommand find = opt_find.orElseGet(() -> fail());
 
         // then
         System.out.print(find.getTitle() + ": ");
         for(BoardRecomRT rtData :find.getBoardgames()){
             System.out.print(rtData.getBoardgame().getKorName() + ", ");
+        }
+
+        em.flush(); em.clear();
+        List<Recommand> recommandList = recommandRepository.findAll();
+        List<BoardgameListDto> boardgameInRecommand = boardgameRepository.getBoardgameInRecommand(recommandList.get(0).getId());
+        for (BoardgameListDto dto : boardgameInRecommand){
+            System.out.println(dto.getKorName());
         }
     }
 
