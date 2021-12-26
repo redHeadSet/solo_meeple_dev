@@ -8,10 +8,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,42 +22,73 @@ public class CrawlingNews {
     public void crawlingNews_chedule() {
         try {
             crawlingNews_KoreaBoardgames();
+            crawlingNews_PopcornGames();
         } catch (Exception e){
             String message = e.getMessage();
             e.printStackTrace();
         }
     }
 
-    public void crawlingNews_KoreaBoardgames() throws Exception {
+    private boolean isDupNews(String title, String url){
+        return newsRepository.findByTitleAndUrl(title, url).isPresent() ? true : false;
+    }
+
+    private void crawlingNews_KoreaBoardgames() throws Exception {
+        String image_path = BoardgameCompany.KOREA_BOARDGAMES.getRepImagePath();
         String crawlingBaseUrl = "https://www.divedice.com/board/";
         String crawlingUrl = crawlingBaseUrl + "?db=basic_1";
         Document document = Jsoup.connect(crawlingUrl).get();
         Elements newsList = document.getElementsByClass("announcement");
+
         for(Element eachPost : newsList){
-            String image_path = eachPost.getElementsByClass("img").get(0)
-                    .getElementsByTag("img")
-                    .attr("src");
+//            String image_path = eachPost.getElementsByClass("img").get(0)
+//                    .getElementsByTag("img")
+//                    .attr("src");
             String write_date = eachPost.getElementsByClass("date").get(0).text();
             write_date += " 00:00:00";
             LocalDateTime writeTime = LocalDateTime.parse(write_date,
                                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
             Element link = eachPost.getElementsByTag("a").get(0);
-            String href = crawlingBaseUrl + link.attr("href");
-            String post_title = link.text();
+            String url = crawlingBaseUrl + link.attr("href");
+            String title = link.text();
 
-//            System.out.println(post_title);
-//            System.out.println(image_path);
-//            System.out.println(write_date);
-//            System.out.println(href);
-//            System.out.println();
+            if( ! isDupNews(title, url))
+                newsRepository.save(
+                        new News(title)
+                        .setUrl(url)
+                        .setWriteTime(writeTime)
+                        .setCompanyImage(image_path));
+        }
+    }
 
-            News news = new News(post_title)
-                    .setUrl(href)
-                    .setWriteTime(writeTime)
-                    .setCompanyImage(StringUtils.hasText(image_path) ? image_path : "");
+    private void crawlingNews_PopcornGames() throws Exception {
+        String repImagePath = BoardgameCompany.POPCORN_GAMES.getRepImagePath();
+        String crawlingUrl = "https://www.popcone.co.kr/board/list.php?bdId=bdfree";
+        String crawlingPageUrl = "https://www.popcone.co.kr/board/view.php?&bdId=bdfree&sno=";
+        Document document = Jsoup.connect(crawlingUrl).get();
+        Elements newsList = document.getElementsByClass("board_tit");
 
-            newsRepository.save(news);
+        for (Element eachNews : newsList){
+            Element parent = eachNews.parent();
+
+            // 공지사항 제외
+            if ((parent.child(0).children().size() > 0)
+                    && (parent.child(0).child(0).attr("alt").equals("공지")))
+                continue;
+
+            String title = eachNews.getElementsByTag("strong").get(0).text();
+            String url = crawlingPageUrl + parent.attr("data-sno");
+            String writeTimeDate = parent.child(2).text();
+            LocalDateTime writeTime = LocalDateTime.parse(writeTimeDate + " 00:00:00",
+                    DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+
+            if(!isDupNews(title, url))
+                newsRepository.save(
+                        new News(title)
+                        .setUrl(url)
+                        .setWriteTime(writeTime)
+                        .setCompanyImage(repImagePath));
         }
     }
 }

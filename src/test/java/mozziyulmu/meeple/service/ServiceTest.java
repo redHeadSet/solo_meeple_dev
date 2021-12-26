@@ -1,9 +1,6 @@
 package mozziyulmu.meeple.service;
 
-import mozziyulmu.meeple.dto.BoardgameDetailDto;
-import mozziyulmu.meeple.dto.BoardgameListDto;
-import mozziyulmu.meeple.dto.RecommandDto;
-import mozziyulmu.meeple.dto.RecommandListDto;
+import mozziyulmu.meeple.dto.*;
 import mozziyulmu.meeple.support.BoardgameFilter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,6 +19,7 @@ import java.util.stream.Stream;
 class ServiceTest {
     @Autowired RecommandService recommandService;
     @Autowired BoardgameService boardgameService;
+    @Autowired NewsService newsService;
 
     // 테스트 전, scheduler 내 Init 처리
 
@@ -41,5 +39,12 @@ class ServiceTest {
 
         Optional<BoardgameDetailDto> boardgameDetail = boardgameService.getBoardgameDetail(boardgameListDtos.getContent().get(0).getId());
         System.out.println();
+    }
+
+    @Test
+    public void 뉴스_테스트() {
+        for (NewsListDto eachNews : newsService.getNewsList()) {
+            System.out.println(eachNews.getTitle());
+        }
     }
 }

@@ -16,7 +16,7 @@ class schedulerTest {
 
     @Test
     @Commit
-    public void test() {
+    public void crawlingNewsTest() {
         crawlingNews.crawlingNews_chedule();
     }
 
