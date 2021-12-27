@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -205,6 +206,7 @@ class RepositoryTest {
     }
 
     @Test
+    @Commit
     public void 사용자_테스트() {
         userRepository.save(new User("email1", "pass1", "nick1"));
         userRepository.save(new User("email2", "pass2", "nick2"));
@@ -214,9 +216,8 @@ class RepositoryTest {
 
         List<User> allUsers = userRepository.findAll();
         Assertions.assertThat(allUsers.size()).isEqualTo(4);
-        for (User each :
-                allUsers) {
-            System.out.println("닉네임 : " + each.getNickName());
+        for (User each : allUsers) {
+            System.out.println("닉네임 : " + each.getNickname());
         }
     }
 

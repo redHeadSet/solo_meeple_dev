@@ -22,11 +22,12 @@ public class User extends BaseTimeData {
     private Long id;
 
     @NotNull
-    private String eMail;
+    @Column(name = "e_mail")
+    private String email;
     @NotNull
     private String password;
     @NotNull
-    private String nickName;
+    private String nickname;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
@@ -45,10 +46,10 @@ public class User extends BaseTimeData {
     // Auditing - BaseUserData 값을 User 값으로 변경 가능한지??
 
     // =================================================================================
-    public User(String e_mail, String password, String nick_name) {
-        this.eMail = e_mail;
+    public User(String email, String password, String nick_name) {
+        this.email = email;
         this.password = password;
-        this.nickName = nick_name;
+        this.nickname = nick_name;
     }
 
     // 사용자가 보드게임 각각을 추가 가능
@@ -67,7 +68,11 @@ public class User extends BaseTimeData {
         evaluateBoardgames.add(new EvaluateBoardgames(this, boardgame));
     }
 
-    public void setProfileImage(Images images) {
-        userProfileImage = images;
+    public void setProfileImage(String imagesPath) {
+        userProfileImage = new Images(imagesPath, this);
+    }
+
+    public void updateNickName(String nickName) {
+        this.nickname = nickName;
     }
 }

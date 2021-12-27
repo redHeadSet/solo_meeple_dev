@@ -62,4 +62,10 @@ public class Images extends BaseUserData {
         this.path = path;
         this.news = news;
     }
+
+    public void updateImage(String path) {
+        if(user == null)
+            return;
+        this.path = path;
+    }
 }

@@ -13,12 +13,14 @@ import mozziyulmu.meeple.support.BoardgameFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardgameService {
     private final BoardgameRepository boardgameRepository;
     private final SearchRepository searchRepository;

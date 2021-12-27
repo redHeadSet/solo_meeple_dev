@@ -7,7 +7,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -280,7 +279,7 @@ class EntityTest {
     public void 이미지_테스트() {
         // given
         User user = new User("email", "password", "nickname");
-        user.setProfileImage(new Images("D:\\aaa.jpg", user));
+//        user.setProfileImage(new Images("D:\\aaa.jpg", user));
         em.persist(user);
         Long userId = user.getId();
 
@@ -300,7 +299,7 @@ class EntityTest {
         // then
         String path = user1.getUserProfileImage().getPath();
         Assertions.assertThat(path).isEqualTo("D:\\aaa.jpg");
-        System.out.println(user1.getNickName() + "님의 이미지는 " + path + "에 있다");
+        System.out.println(user1.getNickname() + "님의 이미지는 " + path + "에 있다");
 
         List<Images> images = boardgame.getImages();
         Assertions.assertThat(images.size()).isEqualTo(3);

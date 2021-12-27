@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 class ServiceTest {
     @Autowired RecommandService recommandService;
     @Autowired BoardgameService boardgameService;
+    @Autowired UserService userService;
     @Autowired NewsService newsService;
 
     // 테스트 전, scheduler 내 Init 처리
@@ -46,5 +48,21 @@ class ServiceTest {
         for (NewsListDto eachNews : newsService.getNewsList()) {
             System.out.println(eachNews.getTitle());
         }
+    }
+
+    @Test
+    @Commit
+    public void 사용자_테스트() {
+        // given
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setEmail("stikfascube@gmail.com");
+        userUpdateDto.setPassword("1234");
+        userUpdateDto.setNickname("두두두");
+
+        userService.update(userUpdateDto);
+        // when
+
+        // then
+
     }
 }
