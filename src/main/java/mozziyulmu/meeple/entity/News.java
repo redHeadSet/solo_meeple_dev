@@ -47,6 +47,11 @@ public class News extends BaseTimeData {
         return this;
     }
 
+    public News setCompanyImage(Images image) {
+        companyImage = image;
+        return this;
+    }
+
     public News setWriteTime(LocalDateTime writeTime) {
         this.writeTime = writeTime;
         return this;

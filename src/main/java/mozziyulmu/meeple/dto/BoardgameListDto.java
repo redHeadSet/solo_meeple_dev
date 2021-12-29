@@ -12,6 +12,7 @@ public class BoardgameListDto {
     private Long id;
     private String korName;
     private String repImagePath;   // 이미지를 어떻게 전달해주지?
+    private String difficulty;
     private int minPlayer;
     private int maxPlayer;
     private Double geekRating;
@@ -31,5 +32,13 @@ public class BoardgameListDto {
         lineComment = boardgame.getLineComment();
 
         viewCategory = boardgame.getPrtRepKorCategory();
+
+        switch (boardgame.getDifficulty()){
+            case EASY:      this.difficulty = "쉬움";     break;
+            case MIDDLE:    this.difficulty = "보통";     break;
+            case HARD:      this.difficulty = "어려움";    break;
+            case MASTER:    this.difficulty = "마스터";    break;
+            default:        this.difficulty = "알 수 없음";
+        }
     }
 }

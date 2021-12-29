@@ -29,14 +29,13 @@ public class RecommandService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<RecommandDto> getRecommandData(Long id) {
+    public RecommandDto getRecommandData(Long id) {
         Optional<Recommand> wrappedRecommand = recommandRepository.findById(id);
 
         if(!wrappedRecommand.isPresent())
-            return Optional.of(null);
+            return null;
 
-        return Optional.of(
-                    new RecommandDto(wrappedRecommand.get())
-                    .setBoardgames(boardgameRepository.getBoardgameInRecommand(id)));
+        return new RecommandDto(wrappedRecommand.get())
+                    .setBoardgames(boardgameRepository.getBoardgameInRecommand(id));
     }
 }

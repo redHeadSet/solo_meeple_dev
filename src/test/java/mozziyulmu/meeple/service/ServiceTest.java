@@ -28,7 +28,7 @@ class ServiceTest {
     @Test
     public void 추천서비스_테스트() {
         List<RecommandListDto> recommandList = recommandService.getRecommandList();
-        Optional<RecommandDto> recommandData = recommandService.getRecommandData(recommandList.get(0).getId());
+        RecommandDto recommandData = recommandService.getRecommandData(recommandList.get(0).getId());
         System.out.println();
     }
 
@@ -39,7 +39,7 @@ class ServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 100);
         Page<BoardgameListDto> boardgameListDtos = boardgameService.searchBoardgame(boardgameFilter, pageRequest);
 
-        Optional<BoardgameDetailDto> boardgameDetail = boardgameService.getBoardgameDetail(boardgameListDtos.getContent().get(0).getId());
+        BoardgameDetailDto boardgameDetail = boardgameService.getBoardgameDetail(boardgameListDtos.getContent().get(0).getId());
         System.out.println();
     }
 

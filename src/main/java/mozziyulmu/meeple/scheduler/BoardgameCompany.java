@@ -4,11 +4,11 @@ public enum BoardgameCompany {
     KOREA_BOARDGAMES("8291",
                     "코리아 보드게임즈",
                     "Korea Boardgames Co., Ltd.",
-                    "코리아 보드게임즈 로고 이미지.jpg"),
+                    "Company_KoreaBoardGames.png"),
     POPCORN_GAMES("41167",
                 "팝콘 게임즈",
                 "Popcorn Games",
-            "팝콘 게임즈 로고 이미지.jpg");
+            "Company_PopcornGames.jpg");
     // 보드엠
     // 스타라이트
     // 로터스 프로그

@@ -9,9 +9,9 @@ import java.util.List;
 public interface BoardgameReposirotyCustom {
     public Page<BoardgameListDto> getBoardgameSimpleList(Pageable pageable);
 
-    public Page<BoardgameListDto> getBoardgameInCategory(String categoryKorName, Pageable pageable);
+    public Page<BoardgameListDto> getBoardgameInCategory(Long categoryId, Pageable pageable);
 
-    public Page<BoardgameListDto> getBoardgameInMechanism(String mechanismKorName, Pageable pageable);
+    public Page<BoardgameListDto> getBoardgameInMechanism(Long mechanismId, Pageable pageable);
 
     public List<BoardgameListDto> getBoardgameInRecommand(Long recommandId);
 

@@ -5,10 +5,6 @@ import mozziyulmu.meeple.dto.UserSignUpDto;
 import mozziyulmu.meeple.dto.UserUpdateDto;
 import mozziyulmu.meeple.service.UserService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,15 +33,4 @@ public class UserController {
     public Boolean update(@ModelAttribute UserUpdateDto userUpdateDto) {
         return userService.update(userUpdateDto);
     }
-
-//    @PostMapping("/imageUpload")
-//    public Boolean testImage(@RequestParam("file") MultipartFile multipartFile){
-//        try {
-//            File dest = new File("D:\\ImageUpload\\" + multipartFile.getOriginalFilename());
-//            multipartFile.transferTo(dest);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return true;
-//    }
 }

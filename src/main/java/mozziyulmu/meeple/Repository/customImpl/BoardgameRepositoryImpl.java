@@ -54,32 +54,26 @@ public class BoardgameRepositoryImpl implements BoardgameReposirotyCustom {
     }
 
     @Override
-    public Page<BoardgameListDto> getBoardgameInCategory(String categoryKorName, Pageable pageable) {
+    public Page<BoardgameListDto> getBoardgameInCategory(Long cateId, Pageable pageable) {
         // 생성자 Projection 처리
         List<BoardgameListDto> contents = jpaQueryFactory
                 .select(Projections.constructor(BoardgameListDto.class, boardCateRT.boardgame))
                 .from(boardCateRT)
-                .where(boardCateRT.category.korName.eq(categoryKorName))
+                .where(boardCateRT.category.id.eq(cateId))
                 .orderBy(boardCateRT.boardgame.geekRating.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-//        JPAQuery<Boardgame> countQuery = jpaQueryFactory
-//                .select(boardCateRT.boardgame)
-//                .from(boardCateRT)
-//                .where(boardCateRT.category.korName.eq(categoryKorName));
-
         return new PageImpl<>(contents, pageable, contents.size());
-//        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
 
     @Override
-    public Page<BoardgameListDto> getBoardgameInMechanism(String mechanismKorName, Pageable pageable) {
+    public Page<BoardgameListDto> getBoardgameInMechanism(Long mechanismId, Pageable pageable) {
         List<BoardgameListDto> contents = jpaQueryFactory
                 .select(Projections.constructor(BoardgameListDto.class, boardMechaRT.boardgame))
                 .from(boardMechaRT)
-                .where(boardMechaRT.mechanism.korName.eq(mechanismKorName))
+                .where(boardMechaRT.mechanism.id.eq(mechanismId))
                 .orderBy(boardMechaRT.boardgame.geekRating.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

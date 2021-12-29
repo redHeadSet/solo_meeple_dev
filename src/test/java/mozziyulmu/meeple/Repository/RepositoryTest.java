@@ -3,6 +3,8 @@ package mozziyulmu.meeple.Repository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import mozziyulmu.meeple.dto.BoardgameListDto;
+import mozziyulmu.meeple.dto.CateListDto;
+import mozziyulmu.meeple.dto.MechListDto;
 import mozziyulmu.meeple.entity.*;
 import mozziyulmu.meeple.entity.Relation.BoardRecom.BoardRecomRT;
 import mozziyulmu.meeple.support.BoardgameFilter;
@@ -291,11 +293,15 @@ class RepositoryTest {
 
         PageRequest pr = PageRequest.of(0, 20);
 
-        for (String each : allCategoryKorName) {
-            System.out.print("카테고리 [" + each + "] 내 게임들 : ");
-            for(BoardgameListDto bgInCt : boardgameRepository.getBoardgameInCategory(each, pr)){
-                System.out.print(bgInCt.getKorName() + ", ");
-            }
+//        for (String each : allCategoryKorName) {
+//            System.out.print("카테고리 [" + each + "] 내 게임들 : ");
+//            for(BoardgameListDto bgInCt : boardgameRepository.getBoardgameInCategory(each, pr)){
+//                System.out.print(bgInCt.getKorName() + ", ");
+//            }
+//            System.out.println();
+//        }
+
+        for (CateListDto each : categoryRepository.findAllCategoriesListDto()) {
             System.out.println();
         }
     }
@@ -309,13 +315,17 @@ class RepositoryTest {
         System.out.println(allMechanismKorName.toString());
 
         PageRequest pr = PageRequest.of(0, 20);
-        Page<BoardgameListDto> result = boardgameRepository.getBoardgameInMechanism("엔진", pr);
+//        Page<BoardgameListDto> result = boardgameRepository.getBoardgameInMechanism("엔진", pr);
 
-        for (BoardgameListDto each : result) {
-            System.out.println(each);
-        }
+//        for (BoardgameListDto each : result) {
+//            System.out.println(each);
+//        }
         // then
 
+        List<MechListDto> allMechanismListDto = mechanismRepository.findAllMechanismListDto();
+        for (MechListDto each : allMechanismListDto){
+            System.out.println();
+        }
     }
 
     @Test

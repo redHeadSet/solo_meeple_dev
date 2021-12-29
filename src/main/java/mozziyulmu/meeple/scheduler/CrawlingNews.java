@@ -1,7 +1,9 @@
 package mozziyulmu.meeple.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import mozziyulmu.meeple.Repository.ImagesRepository;
 import mozziyulmu.meeple.Repository.NewsRepository;
+import mozziyulmu.meeple.entity.Images;
 import mozziyulmu.meeple.entity.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CrawlingNews {
     private final NewsRepository newsRepository;
+    private final ImagesRepository imagesRepository;
 
 //    @Scheduled(cron = "0 0 14 * * 1-5")
     public void crawlingNews_chedule() {
@@ -33,8 +36,15 @@ public class CrawlingNews {
         return newsRepository.findByTitleAndUrl(title, url).isPresent() ? true : false;
     }
 
+    private Images setCompanyImage(String imagePath) {
+        Optional<Images> dbImage = imagesRepository.findByPath(imagePath);
+        return dbImage.orElseGet(null);
+    }
+
     private void crawlingNews_KoreaBoardgames() throws Exception {
-        String image_path = BoardgameCompany.KOREA_BOARDGAMES.getRepImagePath();
+        String imagePath = BoardgameCompany.KOREA_BOARDGAMES.getRepImagePath();
+        Images companyImage = setCompanyImage(imagePath);
+
         String crawlingBaseUrl = "https://www.divedice.com/board/";
         String crawlingUrl = crawlingBaseUrl + "?db=basic_1";
         Document document = Jsoup.connect(crawlingUrl).get();
@@ -53,17 +63,23 @@ public class CrawlingNews {
             String url = crawlingBaseUrl + link.attr("href");
             String title = link.text();
 
-            if( ! isDupNews(title, url))
-                newsRepository.save(
-                        new News(title)
-                        .setUrl(url)
-                        .setWriteTime(writeTime)
-                        .setCompanyImage(image_path));
+            if( ! isDupNews(title, url)){
+                News news = new News(title)
+                                .setUrl(url)
+                                .setWriteTime(writeTime);
+                if (companyImage != null)
+                    news.setCompanyImage(companyImage);
+                else
+                    news.setCompanyImage(imagePath);
+                newsRepository.save(news);
+            }
         }
     }
 
     private void crawlingNews_PopcornGames() throws Exception {
-        String repImagePath = BoardgameCompany.POPCORN_GAMES.getRepImagePath();
+        String imagePath = BoardgameCompany.POPCORN_GAMES.getRepImagePath();
+        Images companyImage = setCompanyImage(imagePath);
+
         String crawlingUrl = "https://www.popcone.co.kr/board/list.php?bdId=bdfree";
         String crawlingPageUrl = "https://www.popcone.co.kr/board/view.php?&bdId=bdfree&sno=";
         Document document = Jsoup.connect(crawlingUrl).get();
@@ -83,12 +99,17 @@ public class CrawlingNews {
             LocalDateTime writeTime = LocalDateTime.parse(writeTimeDate + " 00:00:00",
                     DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
 
-            if(!isDupNews(title, url))
-                newsRepository.save(
-                        new News(title)
+            if(!isDupNews(title, url)){
+                News news = new News(title)
                         .setUrl(url)
-                        .setWriteTime(writeTime)
-                        .setCompanyImage(repImagePath));
+                        .setWriteTime(writeTime);
+
+                if(companyImage != null)
+                    news.setCompanyImage(companyImage);
+                else
+                    news.setCompanyImage(imagePath);
+                newsRepository.save(news);
+            }
         }
     }
 }
