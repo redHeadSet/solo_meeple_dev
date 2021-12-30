@@ -9,15 +9,15 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class SearchReqList {
-    List<String> mechanisms = new ArrayList<>();
-    List<String> categories = new ArrayList<>();
+    List<MechListDto> mechanisms = new ArrayList<>();
+    List<CateListDto> categories = new ArrayList<>();
 
-    public SearchReqList setMechanisms(List<String> mechanisms) {
+    public SearchReqList setMechanisms(List<MechListDto> mechanisms) {
         this.mechanisms = mechanisms;
         return this;
     }
 
-    public SearchReqList setCategories(List<String> categories) {
+    public SearchReqList setCategories(List<CateListDto> categories) {
         this.categories = categories;
         return this;
     }

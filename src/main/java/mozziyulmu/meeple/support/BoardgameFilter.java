@@ -1,8 +1,6 @@
 package mozziyulmu.meeple.support;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import mozziyulmu.meeple.entity.DifficultyGrade;
 
 import java.util.ArrayList;
@@ -13,8 +11,8 @@ public class BoardgameFilter {
     private String innerKorName;
     private Integer players;
     private DifficultyGrade difficultyGrade;
-    private List<String> mechanismsName = new ArrayList<>();
-    private List<String> categoriesName = new ArrayList<>();
+    private List<Long> mechanismIds = new ArrayList<>();
+    private List<Long> categoryIds = new ArrayList<>();
 
     public BoardgameFilter() {
         players = -1;
@@ -35,16 +33,16 @@ public class BoardgameFilter {
         return this;
     }
 
-    public BoardgameFilter addMechanismsName(String... mechanismsName){
-        for(String eachMechName : mechanismsName){
-            this.mechanismsName.add(eachMechName);
+    public BoardgameFilter addMechanisms(List<Long> mechanisms){
+        for(Long eachMech : mechanisms){
+            this.mechanismIds.add(eachMech);
         }
         return this;
     }
 
-    public BoardgameFilter addCategoryName(String... categorysName){
-        for(String eachCateName : categorysName){
-            this.categoriesName.add(eachCateName);
+    public BoardgameFilter addCategory(List<Long> categorys){
+        for(Long eachCate : categorys){
+            this.categoryIds.add(eachCate);
         }
         return this;
     }

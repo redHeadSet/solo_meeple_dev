@@ -32,32 +32,40 @@ public class SearchRepositoryImpl implements SearchRepositoryCustom {
     @Override
     public Page<BoardgameListDto> searchBoardgame(BoardgameFilter boardgameFilter, Pageable pageable) {
         List<Long> boardgameIds = new ArrayList<>();
-        List<String> categoriesNames = boardgameFilter.getCategoriesName();
-        long cateSize = categoriesNames.size();
+        List<Long> categoryIds = boardgameFilter.getCategoryIds();
+        long cateSize = categoryIds.size();
         if(cateSize > 0){
-            boardgameIds.addAll(
-                    jpaQueryFactory
-                        .select(boardCateRT.boardgame.id)
-                        .from(boardCateRT)
-                        .where(boardCateRT.category.korName.in(categoriesNames))
-                        .groupBy(boardCateRT.boardgame.id)
-                        .having(boardCateRT.boardgame.id.count().eq(cateSize))
-                        .fetch()
-            );
+            List<Long> boardgameInCategory = jpaQueryFactory
+                    .select(boardCateRT.boardgame.id)
+                    .from(boardCateRT)
+                    .where(boardCateRT.category.id.in(categoryIds))
+                    .groupBy(boardCateRT.boardgame.id)
+                    .having(boardCateRT.boardgame.id.count().eq(cateSize))
+                    .fetch();
+
+            // 검색 결과가 없는 경우
+            if(boardgameInCategory.size() == 0)
+                return new PageImpl<>(new ArrayList<>(), pageable, 0);
+
+            boardgameIds.addAll(boardgameInCategory);
         }
 
-        List<String> mechanismsNames = boardgameFilter.getMechanismsName();
-        long mechSize = mechanismsNames.size();
+        List<Long> mechanismIds = boardgameFilter.getMechanismIds();
+        long mechSize = mechanismIds.size();
         if(mechSize > 0){
-            boardgameIds.addAll(
-                    jpaQueryFactory
-                        .select(boardMechaRT.boardgame.id)
-                        .from(boardMechaRT)
-                        .where(boardMechaRT.mechanism.korName.in(mechanismsNames))
-                        .groupBy(boardMechaRT.boardgame.id)
-                        .having(boardMechaRT.boardgame.id.count().eq(mechSize))
-                        .fetch()
-            );
+            List<Long> boardgameInMechanism = jpaQueryFactory
+                    .select(boardMechaRT.boardgame.id)
+                    .from(boardMechaRT)
+                    .where(boardMechaRT.mechanism.id.in(mechanismIds))
+                    .groupBy(boardMechaRT.boardgame.id)
+                    .having(boardMechaRT.boardgame.id.count().eq(mechSize))
+                    .fetch();
+
+            // 검색 결과가 없는 경우
+            if(boardgameInMechanism.size() == 0)
+                return new PageImpl<>(new ArrayList<>(), pageable, 0);
+
+            boardgameIds.addAll(boardgameInMechanism);
         }
 
         List<BoardgameListDto> contents = jpaQueryFactory

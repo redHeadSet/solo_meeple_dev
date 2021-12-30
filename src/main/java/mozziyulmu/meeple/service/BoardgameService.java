@@ -64,7 +64,7 @@ public class BoardgameService {
 
     public SearchReqList initSearchFilter() {
         return new SearchReqList()
-                .setMechanisms(mechanismRepository.findAllMechanismKorName())
-                .setCategories(categoryRepository.findAllCategoryKorName());
+                .setMechanisms(mechanismRepository.findAllMechanismListDto())
+                .setCategories(categoryRepository.findAllCategoriesListDto());
     }
 }
