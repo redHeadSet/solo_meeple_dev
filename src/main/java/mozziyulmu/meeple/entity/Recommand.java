@@ -26,7 +26,7 @@ public class Recommand extends BaseTimeData {
     @Column(name = "recommand_description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Images repImages;
 

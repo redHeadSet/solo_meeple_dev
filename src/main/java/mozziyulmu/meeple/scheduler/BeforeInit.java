@@ -323,11 +323,13 @@ public class BeforeInit {
 
 
     private void savePublisher(BoardgameCompany boardgameCompany){
-        publisherRepository.save(new Publisher(boardgameCompany.getKorName(), boardgameCompany.getEngName()));
+        if(publisherRepository.findByKorName(boardgameCompany.getKorName()) == null)
+            publisherRepository.save(new Publisher(boardgameCompany.getKorName(), boardgameCompany.getEngName()));
     }
 
     // BoardgameCompany enum 에 등록된 퍼블리셔 처리
     public void setPublishers(){
         savePublisher(BoardgameCompany.KOREA_BOARDGAMES);
+        savePublisher(BoardgameCompany.POPCORN_GAMES);
     }
 }

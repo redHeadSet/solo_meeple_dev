@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static mozziyulmu.meeple.scheduler.BoardgameCompany.KOREA_BOARDGAMES;
+import static mozziyulmu.meeple.scheduler.BoardgameCompany.POPCORN_GAMES;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class CrawlingBoardgameInfo {
     public void getBoardgameInfo() {
         try {
             getBoardgamesInfoFromPublisher(KOREA_BOARDGAMES);
-//            getBoardgameInfo_KoreaBoardgames(BOARDGAME_COMPANY_ID.POPCORN_GAMES);
+            getBoardgamesInfoFromPublisher(POPCORN_GAMES);
         } catch (Exception e){
             String message = e.getMessage();
             e.printStackTrace();
@@ -106,25 +107,27 @@ public class CrawlingBoardgameInfo {
             return;
 
         String gameUrl = "https://www.boardgamegeek.com/xmlapi2/thing?stats=1&id=";
-        String tenGames = "";
+        String onceQueryGames = "";
         int count = 0, cum_count = 0;
         JacksonXmlModule module = new JacksonXmlModule();
         module.setDefaultUseWrapper(false);
         XmlMapper xmlMapper = new XmlMapper(module);
 
         for (String boardgameNo : boardgameIds){
-            tenGames += boardgameNo;
-            count++;
             cum_count++;
+            if(boardgameRepository.findByGeekId(Long.parseLong(boardgameNo)).isPresent())
+                continue;
 
+            onceQueryGames += boardgameNo;
+            count++;
             if((count < ONCE_GEEK_QUERY_COUNT) && (cum_count != boardgameIds.size())){
-                tenGames += ",";
+                onceQueryGames += ",";
                 continue;
             }
             else{
                 ParseGeekGameData parseGeekGameData
                         = xmlMapper.readValue(
-                        restTemplate.getForObject(gameUrl + tenGames, String.class),
+                        restTemplate.getForObject(gameUrl + onceQueryGames, String.class),
                         ParseGeekGameData.class
                 );
 
@@ -183,7 +186,7 @@ public class CrawlingBoardgameInfo {
                     boardgameRepository.save(boardgame);
                 }
 
-                tenGames = "";
+                onceQueryGames = "";
                 count = 0;
             }
         }

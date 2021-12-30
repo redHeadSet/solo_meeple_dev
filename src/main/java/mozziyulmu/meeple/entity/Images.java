@@ -24,17 +24,17 @@ public class Images extends BaseUserData {
     @JoinColumn(name = "boardgame_id")
     private Boardgame boardgame;
 
-    @OneToOne(mappedBy = "userProfileImage")
+    @OneToOne(mappedBy = "userProfileImage", fetch = FetchType.LAZY)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToOne(mappedBy = "repImages")
+    @OneToOne(mappedBy = "repImages", fetch = FetchType.LAZY)
     private Recommand recommand;
 
-    @OneToOne(mappedBy = "companyImage")
+    @OneToOne(mappedBy = "companyImage", fetch = FetchType.LAZY)
     private News news;
 
     // ====================================================================
