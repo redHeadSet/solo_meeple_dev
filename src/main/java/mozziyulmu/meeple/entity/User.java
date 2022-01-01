@@ -72,7 +72,8 @@ public class User extends BaseTimeData {
         userProfileImage = new Images(imagesPath, this);
     }
 
-    public void updateNickName(String nickName) {
+    public User updateNickName(String nickName) {
         this.nickname = nickName;
+        return this;
     }
 }

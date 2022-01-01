@@ -18,5 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
     @Query("select count(1) from User where nickname = :nickName")
     int checkDupNickName(@Param("nickName") String nickName);
 
+    Optional<User> findByEmail(String email);
     Optional<User> findByEmailAndPassword(String email, String password);
 }
