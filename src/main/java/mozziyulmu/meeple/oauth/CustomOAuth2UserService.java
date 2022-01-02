@@ -20,29 +20,31 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
+        OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
 
-        String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
-        String userNameAttributeName = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        String userNameAttributeName = userRequest.getClientRegistration()
+                .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes =
+                OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+
         User user = setUser(attributes);
-        httpSession.setAttribute("user", new SessionUser(user));
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("GUEST")),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());
+        return new DefaultOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                attributes.convertToMap(), "email");
     }
 
     private User setUser(OAuthAttributes attributes) {
         Optional<User> findUser = userRepository.findByEmail(attributes.getEmail());
         User rtnUser = null;
         if(findUser.isPresent()){
+            rtnUser = findUser.get();
             rtnUser.updateNickName(attributes.getName());
         }
         else{

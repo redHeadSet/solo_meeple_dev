@@ -1,26 +1,40 @@
 package mozziyulmu.meeple.controller;
 
 import lombok.RequiredArgsConstructor;
-import mozziyulmu.meeple.oauth.SessionUser;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import mozziyulmu.meeple.oauth.Token;
+import mozziyulmu.meeple.oauth.TokenService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class IndexTest {
-    private final HttpSession httpSession;
+    private final TokenService tokenService;
 
-    @GetMapping("/test")
-    public String index(Model model) {
-//        model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+    @GetMapping("/token/expired")
+    public String auth() {
+        throw new RuntimeException();
+    }
 
-        if (sessionUser != null)
-            model.addAttribute("userName", sessionUser.getNickname());
+    @GetMapping("/token/refresh")
+    public String refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Refresh");
 
-        return "index";
+        if (token != null && tokenService.verifyToken(token)) {
+            String email = tokenService.getUid(token);
+            Token newToken = tokenService.generateToken(email, "USER");
+
+            response.addHeader("Auth", newToken.getToken());
+            response.addHeader("Refresh", newToken.getRefreshToken());
+            response.setContentType("application/json;charset=UTF-8");
+
+            return "HAPPY NEW TOKEN";
+        }
+
+        throw new RuntimeException();
     }
 }
