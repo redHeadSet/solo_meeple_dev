@@ -3,54 +3,84 @@ package mozziyulmu.meeple.oauth;
 import lombok.RequiredArgsConstructor;
 import mozziyulmu.meeple.Repository.UserRepository;
 import mozziyulmu.meeple.entity.User;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
     private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
+        OAuth2User user = super.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-
-        OAuthAttributes attributes =
-                OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-
-        User user = setUser(attributes);
-
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                attributes.convertToMap(), "email");
+        try {
+            return this.process(userRequest, user);
+        } catch (AuthenticationException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
+        }
     }
 
-    private User setUser(OAuthAttributes attributes) {
-        Optional<User> findUser = userRepository.findByEmail(attributes.getEmail());
-        User rtnUser = null;
-        if(findUser.isPresent()){
-            rtnUser = findUser.get();
-            rtnUser.updateNickName(attributes.getName());
+    private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User user) {
+        ProviderType providerType = ProviderType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
+
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
+        User savedUser = userRepository.findByUserId(userInfo.getId());
+
+        if (savedUser != null) {
+            if (providerType != savedUser.getProviderType()) {
+                throw new OAuthProviderMissMatchException(
+                        "Looks like you're signed up with " + providerType +
+                                " account. Please use your " + savedUser.getProviderType() + " account to login."
+                );
+            }
+            updateUser(savedUser, userInfo);
+        } else {
+            savedUser = createUser(userInfo, providerType);
         }
-        else{
-            rtnUser = attributes.toEntity();
-            userRepository.save(rtnUser);
+
+        return UserPrincipal.create(savedUser, user.getAttributes());
+    }
+
+    private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
+        LocalDateTime now = LocalDateTime.now();
+        User user = new User(
+                userInfo.getId(),
+                userInfo.getName(),
+                userInfo.getEmail(),
+                "Y",
+                userInfo.getImageUrl(),
+                providerType,
+                RoleType.USER,
+                now,
+                now
+        );
+
+        return userRepository.saveAndFlush(user);
+    }
+
+    private User updateUser(User user, OAuth2UserInfo userInfo) {
+        if (userInfo.getName() != null && !user.getUsername().equals(userInfo.getName())) {
+            user.setUsername(userInfo.getName());
         }
-        return rtnUser;
+
+        if (userInfo.getImageUrl() != null && !user.getProfileImageUrl().equals(userInfo.getImageUrl())) {
+            user.setProfileImageUrl(userInfo.getImageUrl());
+        }
+
+        return user;
     }
 }
+
